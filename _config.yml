@@ -23,7 +23,7 @@ background-img: "/img/intro-bg.jpg"
 
 # About variables
 
-me-img: "/img/me.jpg"
+me-img: "/img/me.png"
 
 # Blog variables
 paginate: 15
@@ -51,12 +51,6 @@ events:
   - image: "/img/career/writeright.jpg"
     date: "September 2010 - December 2013"
     description: "Bachelor of Arts in Economics and Film & Media Studies from UC Santa Barbara"
-  - image: "/img/career/pwnmail.jpg"
-    date: "June 2010 - November 2010"
-    description: ""
-  - image: "/img/career/uoa.jpg"
-    date: "October 2007 - September 2011"
-    description: "Bachelor studies @ <a href=\"http://www.di.uoa.gr/eng\" target=\"_blank\">Department of Informatics and Telecommunications</a> on Computer Science and Telecomunications"
 
 # First image of the Career timeline
 career-img: "/img/career/default.jpg"
