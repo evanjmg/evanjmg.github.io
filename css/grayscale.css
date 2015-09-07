@@ -14,8 +14,8 @@ body {
     width: 100%;
     height: 100%;
     font-family: Montserrat, "Helvetica Neue",Helvetica,Arial,sans-serif;
-    color: #fff;
-    background-color: #000;
+    color: #222;
+    background-color: #f2f2f2;
 }
 
 html {
@@ -55,7 +55,7 @@ nop {
 }
 
 a {
-    color: #fed136;
+    color: #428BCA;
     /* color: #219ab3; */
     -webkit-transition: all .2s ease-in-out;
     -moz-transition: all .2s ease-in-out;
@@ -65,7 +65,7 @@ a {
 a:hover,
 a:focus {
     text-decoration: none;
-    color: #fec503;
+    color: #428BCA;
     /* color: #11505d; */
 }
 
@@ -86,8 +86,9 @@ a:focus {
     margin-bottom: 0;
     border-bottom: 1px solid rgba(255,255,255,.3);
     text-transform: uppercase;
+    color:#fff;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
-    background-color: #000;
+    background-color: rgb(66, 139, 202);
    
 }
 
@@ -116,7 +117,7 @@ a:focus {
 
 .navbar-custom .nav li.active {
     outline: nonte;
-    background-color: rgba(255,255,255,.3);
+    background-color: rgba(66, 139, 202,1);
 }
 
 .navbar-custom .nav li a {
@@ -129,7 +130,7 @@ a:focus {
 .navbar-custom .nav li a:focus,
 .navbar-custom .nav li a.active {
     outline: 0;
-    background-color: rgba(255,255,255,.3);
+    background-color: rgba(255,255,255,1);
 }
 
 @media(min-width:767px) {
@@ -137,7 +138,7 @@ a:focus {
         padding: 20px 0;
         border-bottom: 0;
         letter-spacing: 1px;
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(66, 139, 202,1);
         background: 0 50;
         -webkit-transition: background .5s ease-in-out,padding .5s ease-in-out;
         -moz-transition: background .5s ease-in-out,padding .5s ease-in-out;
@@ -146,11 +147,11 @@ a:focus {
 
     .top-nav-collapse {
         padding: 0;
-        background-color: #000;
+        background-color: rgb(66, 139, 202);
     }
 
     .navbar-custom.top-nav-collapse {
-        border-bottom: 1px solid rgba(255,255,255,.3);
+        border-bottom: 1px solid rgba(66, 139, 202,.3);
     }
 }
 
@@ -162,7 +163,7 @@ a:focus {
     text-align: center;
     color: #fff;
     background: url( {{ site.background-img }} ) no-repeat bottom center scroll;
-    background-color: #000;
+    background-color: rgb(66, 139, 202);
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -299,7 +300,7 @@ a:focus {
 
 @media(min-width:767px) {
     .content-section {
-        padding-top: 250px;
+        padding-top: 100px;
     }
 
     .download-section {

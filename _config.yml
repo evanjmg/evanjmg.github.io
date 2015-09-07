@@ -16,8 +16,9 @@ disqus-shortname: "evanjmg"
 pages_list:
   About: 'about'
   Blog: 'blog'
-  Portfolio: 'career'
+  Career: 'career'
   Contact: 'contact'
+  Portfolio: 'portfolio'
 
 background-img: "/img/intro-bg.jpg"
 

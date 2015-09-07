@@ -25,12 +25,8 @@ $(function() {
        WidthChange(mq);
     }
     function WidthChange(mq) {
-    if (mq.matches) {
-    $('div.title').html('')
-}
-else {
+  
     $('div.title').html('Evan Gillogley')
-}
 }
     $('a.page-scroll').bind('click', function(event) {
         var $anchor = $(this);

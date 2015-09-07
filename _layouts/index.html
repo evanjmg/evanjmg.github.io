@@ -14,13 +14,14 @@
     {% if page.section-type == "about" %}
 
       {% include about.html %}
-
+   
     {% elsif page.section-type == "latest-post" %}
 
       {% include latest-post.html %}
-
+    {% elsif page.section-type == "portfolio" %}
+    {% include portfolio.html %}
     {% elsif page.section-type == "career" %}
-
+    
       {% include career.html %}
 
     {% elsif page.section-type == "contact" %}
