@@ -4,10 +4,14 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+
+
 // jQuery to collapse the navbar on scroll
 $(window).scroll(function() {
+  
     if ($(".navbar").offset().top > 50) {
         $(".navbar-fixed-top").addClass("top-nav-collapse");
+            $('div.title').html('Evan Gillogley')
     } else {
         $(".navbar-fixed-top").removeClass("top-nav-collapse");
     }
@@ -15,6 +19,19 @@ $(window).scroll(function() {
 
 // jQuery for page scrolling feature - requires jQuery Easing plugin
 $(function() {
+    if (matchMedia) {
+       var mq = window.matchMedia("(min-width: 800px)");
+       mq.addListener(WidthChange);
+       WidthChange(mq);
+    }
+    function WidthChange(mq) {
+    if (mq.matches) {
+    $('div.title').html('')
+}
+else {
+    $('div.title').html('Evan Gillogley')
+}
+}
     $('a.page-scroll').bind('click', function(event) {
         var $anchor = $(this);
         $('html, body').stop().animate({

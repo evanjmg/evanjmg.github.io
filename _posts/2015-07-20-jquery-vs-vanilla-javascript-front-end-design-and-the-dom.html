@@ -1,0 +1,24 @@
+---
+layout: post
+section-type: post
+title: 'jQuery vs Vanilla JavaScript: Front-End Design and the DOM'
+date: 2015-07-20 10:30:22.000000000 +01:00
+categories: Digital Marketing
+
+---
+<p class="p1"><span class="s1"><a href="http://evanjmg.com/wp-content/uploads/2015/07/javascriptLogo.png"></a><a href="https://jquery.com/" target="_blank">JQuery</a> has its many benefits. It's  shorter for 'most things' and it has powerful animations and looping methods. Most of all, it just saves developers time. </span></p>
+<img class="alignright size-full wp-image-264" src="/img/posts/javascriptLogo.png" alt="javascriptLogo" width="200" height="200" style="padding:20px;" />
+<p class="p1"><span class="s1"> Here are some examples of powerful methods in jQuery:</span></p>
+<p><code><br />
+.each<br />
+Fadein()<br />
+Animate()<br />
+Prepend()<br />
+append()<br />
+</code></p>
+<p class="p1"><span class="s1">There are many more methods that manipulate html and css. Animate and toggle through attributes, but I recommend to .css libraries and toggle on and off the css. </span></p>
+<p class="p1">Plus, there are a few commonly used methods that are shorter in JavaScript, see them here: <a href="http://youmightnotneedjquery.com/">http://youmightnotneedjquery.com/</a> .</p>
+<p class="p1"><span class="s1"><strong>Cons of jQuery: </strong>jQuery is slower. In order to speed it up, I recommend linking it to <a href="https://code.jquery.com/">a CDN</a>, using a <a href="https://jquery.com/download/">minified version</a>, and checking your speed at <a href="http://jperf.com/"><span class="s2">JPerf.com</span></a>. JQuery overrides objects and their relationship to the DOM. Meaning, one cannot use DOM methods for jQuery objects such as .value or innerHTML. Instead, one has to stick to the jQuery library unless they pull the value out with a Get method or attaching an index 0 to pull the object out. However, this dirty trick doesn't allow one to use the DOM Api with the object. In other words, the object is neither an object of the DOM or jQuery. It is in weird middle ground state.</span></p>
+<p class="p1"><span class="s1">Furthermore, jQuery does not work with some built-in Browser apis, such as canvas. If you want to keep your Dom APIs and have powerful style, I'd strongly recommend using a CSS library such as <a href="https://daneden.github.io/animate.css/">Animate.css</a>. Simply use vanilla js to add and remove classes to create animations for non-jQuery objects. It's not worth your time to use a jQuery Hybrid such as <a href="http://calebevans.me/projects/jcanvas/">Jcanvas</a></span></p>
+<p class="p1"><span class="s1"><strong>Suggestion:</strong> Use jQuery if you want to keep your object in jQuery. Thankfully the jQuery library and its numerous plugins can do most of what the DOM does with a few more bells and whistles. </span></p>
+<p class="p1">

@@ -7,11 +7,13 @@
  * Code licensed under the Apache License v2.0.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
-
+ .last-image {
+    margin-left: -100px;
+ }
 body {
     width: 100%;
     height: 100%;
-    font-family: Lora,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: Montserrat, "Helvetica Neue",Helvetica,Arial,sans-serif;
     color: #fff;
     background-color: #000;
 }
@@ -86,6 +88,7 @@ a:focus {
     text-transform: uppercase;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
     background-color: #000;
+   
 }
 
 .navbar-custom .navbar-brand {
@@ -134,7 +137,8 @@ a:focus {
         padding: 20px 0;
         border-bottom: 0;
         letter-spacing: 1px;
-        background: 0 0;
+        background-color: rgba(0,0,0,0.5);
+        background: 0 50;
         -webkit-transition: background .5s ease-in-out,padding .5s ease-in-out;
         -moz-transition: background .5s ease-in-out,padding .5s ease-in-out;
         transition: background .5s ease-in-out,padding .5s ease-in-out;
@@ -171,11 +175,14 @@ a:focus {
 }
 
 .intro .intro-body .brand-heading {
-    font-size: 40px;
+    font-size: 30px;
+
+
 }
 
-.intro .intro-body .intro-text {
-    font-size: 18px;
+
+.brand-heading {
+    margin-top: 40px;
 }
 
 @media(min-width:767px) {
@@ -189,7 +196,8 @@ a:focus {
     }
 
     .intro .intro-body .intro-text {
-        font-size: 25px;
+        font-size: 50px;
+        text-transform: uppercase;
     }
 }
 
@@ -347,8 +355,14 @@ ul.banner-social-buttons {
     ul.banner-social-buttons li:last-child {
         margin-bottom: 0;
     }
-}
 
+}
+@media(max-width:500px) {
+.last-image {
+   margin-left: -90px;
+   margin-top: -50px;
+   width:300px;
+}
 ul.social-buttons {
     margin-bottom: 0;
 }

@@ -39,21 +39,20 @@ reddit-share: True
 # Career variables
 
 events:
-  - image: "/img/career/microsoft.jpg"
+  - image: "/img/career/general-assembly.png"
     date: "June 2015 - Present"
-    description: "Student @ General Assembly, 12-week Web Development Immersive @ the <a href=\"http://dev.office.com/officegraph\" target=\"_blank\"> Office Graph</a>"
-  - image: "/img/career/uoa.jpg"
+    description: "Student @ General Assembly, 12-week Web Development Immersive course, focusing on Node.js, Rails, and Angular"
+  - image: "/img/career/GCULondon.png"
     date: "Jan 2015 - Present"
     description: "MSc International Marketing @ <a href=\"http://www.di.uoa.gr/eng\" target=\"_blank\">Glasgow Caledonian University</a> - Emphasis: Digital Marketing"
-  - image: "/img/career/cern.jpg"
+  - image: "/img/career/bbb-logo.png"
     date: "March 2014 - Jan 2015"
-    description: "Communications Specialist @ <a href=\'http://http://www.bbb.org/northeast-california'>Better Business Bureau</a> developed and implemented digital marketing campaigns and managed website."
-  - image: "/img/career/writeright.jpg"
+    description: "Communications Specialist @ <a href=\'http://http://www.bbb.org/northeast-california'>Better Business Bureau</a>. I developed and implemented digital marketing campaigns and managed website."
+  - image: "/img/career/ucsb-logo.png"
     date: "September 2010 - December 2013"
     description: "Bachelor of Arts in Economics and Film & Media Studies from UC Santa Barbara"
-
 # First image of the Career timeline
-career-img: "/img/career/default.jpg"
+career-img: "https://media.giphy.com/media/sRWA81tuBkfW8/giphy.gif"
 
 # Social networks variables (many more available: facebook, flickr, dribbble, pinterest, instagram, tumblr etc.)
 social:
