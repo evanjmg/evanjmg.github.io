@@ -19,6 +19,21 @@ $(window).scroll(function() {
 
 // jQuery for page scrolling feature - requires jQuery Easing plugin
 $(function() {
+    $('.img-panel').hover(
+  function() {
+    $(this).stop(true).fadeTo("slow", 0);
+    $(this).prev().stop(true).fadeTo("slow", 1);
+  }, function() {
+   $(this).stop(true).fadeTo("slow", 1)
+   $(this).prev().fadeOut();
+  });
+
+    // .on('mouseover', function (){
+      
+    // });
+    // $('.panel-img-container').on('mouseout', function (){
+       
+    // });
     if (matchMedia) {
        var mq = window.matchMedia("(min-width: 800px)");
        mq.addListener(WidthChange);

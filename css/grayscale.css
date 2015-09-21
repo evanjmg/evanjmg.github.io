@@ -10,6 +10,27 @@
  .last-image {
     margin-left: -100px;
  }
+ ul.social-buttons li a {
+     display: block;
+     width: 40px;
+     height: 40px;
+     border-radius: 100%;
+     font-size: 20px;
+     line-height: 40px;
+     outline: 0;
+     /* color: #fff; */
+     color: white;
+     background-color: #428BCA;
+     -webkit-transition: all .3s;
+     -moz-transition: all .3s;
+     transition: all .3s;
+ }
+ ul.social-buttons li a:hover,
+ ul.social-buttons li a:focus,
+ ul.social-buttons li a:active {
+   background-color: white;
+     color: #428BCA;
+ }
 body {
     width: 100%;
     height: 100%;
@@ -348,6 +369,9 @@ ul.banner-social-buttons {
 }
 
 @media(max-width:767px) {
+    .title {
+     font-size: 20px;
+    }
     ul.banner-social-buttons li {
         display: block;
         margin-bottom: 20px;
@@ -378,19 +402,14 @@ ul.social-buttons li a {
     line-height: 40px;
     outline: 0;
     /* color: #fff; */
-    background-color: #222;
-
+    color: white;
+    background-color: #428BCA;
     -webkit-transition: all .3s;
     -moz-transition: all .3s;
     transition: all .3s;
 }
 
-ul.social-buttons li a:hover,
-ul.social-buttons li a:focus,
-ul.social-buttons li a:active {
-    color: #222;
-    background-color: #fec503;
-}
+
 
 footer {
     padding: 50px 0;
