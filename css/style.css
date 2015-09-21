@@ -1,5 +1,5 @@
  .title {
-  font-size: 30px;
+  font-size: 27px;
  }
  .style-panel
  { width: 300px;
@@ -56,7 +56,7 @@ a.panel-text-item {
 .panel-text-item:hover {
   text-decoration: underline;
 }
-@media(max-width:767px) { 
+@media(max-width:987px) { 
 .intro-text {
   text-transform: uppercase;
   }
