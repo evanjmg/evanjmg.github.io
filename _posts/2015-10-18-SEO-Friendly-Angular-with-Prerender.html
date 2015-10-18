@@ -15,12 +15,12 @@ categories: Code
 	<p>
 		
 	</p>
-	<p> See <a href="#tutorial">Tutorial</a> if you understand how SEO works with AJAX applications. Or you just want to see the code, <a href="https://github.com/evanjmg/Angular-SEO-Prerender" target='_blank'>check out my repo here</a>. </p>
+	<p> See <a href="#tutorial">Tutorial</a> if you understand how SEO works with AJAX applications. Or if you just want to see the code, <a href="https://github.com/evanjmg/Angular-SEO-Prerender" target='_blank'>check out my repo here</a>. </p>
 	<p>
 		
 	</p>
 	<h2> What Search Engines do: </h2>
-	<li> First they enter your webpage and check if it's an AJAX page. This is either through a present hashbang (!#) in the link or through pushstate as seen below:	<br/><code>
+	<li> First, they enter your webpage and check if it's an AJAX page. This is either through a present hashbang (!#) in the link or through pushstate meta tag as seen below:	<br/><code>
 		
 	&lt;meta name=&quot;fragment&quot; content=&quot;!&quot;&gt;</code> present in the head of the page. 	<br/> ( I <strong> highly recommend pushstate.</strong> I'll show you how to set that up in this tutorial)</li>
 
@@ -40,12 +40,12 @@ categories: Code
 		
 	</p>
 	<h2> Setup For Angular</h2>
-	We need to setup HTML pushState. Don't use the hashbang (!#). It's 2015, please don't use the hashbang unless your Angular app is part of a greater HTML site. Essentially, we need to convert  www.example.com/#/ to 
+	We need to setup HTML pushState. I don't recommend using the hashbang (!#). It's 2015,  use the hashbang onlu if your Angular app is part of a greater HTML site. Essentially, we need to convert  www.example.com/#/ to 
 	www.example.com/ through the HTML History API.
 	<p>
 	</p>
 	<h2>How This All Works</h2>
-	I made a diagram of the flow of how the whole flow works with AJAX/Angular applications. You can also cache the pages in order to save time/money of the server loading time. Prerender has plugins and guidelines as how to set this up. 
+	I made a diagram of the flow of how it works with AJAX/Angular applications. You can also cache the pages with Amazon S3 storage in order to save time/money of the server loading time. Prerender has plugins and guidelines as how to set this up. 
 	<p>
 		
 	</p>	<a target="_blank" href="/img/posts/angular-seo-steps.png"> (Click to Enlarge)
