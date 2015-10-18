@@ -1,0 +1,274 @@
+---
+layout: post
+section-type: post
+title: 'Setup SEO Friendly Angular Apps with Prerender.io'
+date: 2015-10-18 10:30:22.000000000 +01:00
+categories: Code
+
+---
+<style>
+	.code-post-container > li, code, pre { text-align: left;}
+</style>
+<div class="code-post-container">
+<p>
+	Making SEO work in AJAX applications is not necessarily that hard. In fact, Google, Yahoo, and Bing will recognize your ajax application and request an html version of the JavaScript generated pages. In this tutorial, I'll explain how the search engine handles AJAX pages and what we need to do to setup SEO friendly AJAX pages.
+	<p>
+		
+	</p>
+	<p> See <a href="#tutorial">Tutorial</a> if you understand how SEO works with AJAX applications. Or you just want to see the code, <a href="https://github.com/evanjmg/Angular-SEO-Prerender" target='_blank'>check out my repo here</a>. </p>
+	<p>
+		
+	</p>
+	<h2> What Search Engines do: </h2>
+	<li> First they enter your webpage and check if it's an AJAX page. This is either through a present hashbang (!#) in the link or through pushstate as seen below:	<br/><code>
+		
+	&lt;meta name=&quot;fragment&quot; content=&quot;!&quot;&gt;</code> present in the head of the page. 	<br/> ( I <strong> highly recommend pushstate.</strong> I'll show you how to set that up in this tutorial)</li>
+
+	<li> Upon finding that page they make a request with an escape_fragment like so: 'www.example.com?_escaped_fragment_=’</li>
+	<li>Our server then sends back the full HTML version (aka snapshot).</li> 
+	<li>The search engine then crawls and indexes that HTML. </li>
+	<p>
+		
+	</p>
+	<h2>What We Need to Do:</h2>
+	<li>We need to have the meta tag:
+	<br/><code>	&lt;meta name=&quot;fragment&quot; content=&quot;!&quot;&gt;</code></li>
+	<li> We need a server that supports the escape_fragment request</li>
+	<li>This server should also compile a snapshot of our page. In other words, we need a headless browser (see <a href="http://phantomjs.org/" target='_blank'>PhantomJS</a>) that runs on a server in order to generate the html</li>
+	<li>We need to send back this snapshot to the crawler</li> 
+	<p>
+		
+	</p>
+	<h2> Setup For Angular</h2>
+	We need to setup HTML pushState. Don't use the hashbang (!#). It's 2015, please don't use the hashbang unless your Angular app is part of a greater HTML site. Essentially, we need to convert  www.example.com/#/ to 
+	www.example.com/ through the HTML History API.
+	<p>
+	</p>
+	<h2>How This All Works</h2>
+	I made a diagram of the flow of how the whole flow works with AJAX/Angular applications. You can also cache the pages in order to save time/money of the server loading time. Prerender has plugins and guidelines as how to set this up. 
+	<p>
+		
+	</p>	<a target="_blank" href="/img/posts/angular-seo-steps.png"> (Click to Enlarge)
+<img src="/img/posts/angular-seo-steps.png" style="max-width:700px;" alt=""></a>
+<p></p>
+	<h2>Tutorial: </h2>
+<p>
+	For this tutorial, I'm using 2 Node.js servers. One for the App and another for rendering the HTML. 
+	</p>
+	<h3>What You'll Need: </h3>
+	<li> NPM, Node.js, Express installed (you can use a Rails server <a href="http://www.angularonrails.com/get-html5-pushstate-working-angular-rails/" target='_blank'>see this article</a> )</li>
+	<li>Bower Installed ( 'npm install bower') </li>
+	<li>Prerender's Server - <a href="https://github.com/prerender/prerender" target="_blank">download and npm install github repo</a></li>
+	<li>Prerender Middleware - <a href="https://github.com/prerender/prerender-node">npm install prerender-node --save</a></li>
+	<li>Angular installed with UIrouter</li>
+	<p>
+		
+	</p>
+	<h3>Getting Started</h3>
+<p>
+	
+</p>
+		<h2> Backend - Express Application with the Middleware.</h2>
+		Find an empty directory. If prompted for other things, just press enter (for bower's type use node). In your terminal, enter the following:
+		<code> npm install express prerender-node --save
+		  </code>
+		<br/>
+		  <code>
+		  	bower init
+		  </code>
+		  <br/>
+		  <code>
+		  	npm init
+		  </code>
+		  <br/>
+		  <code>
+		  	touch server.js
+		  </code>
+		  <p></p>
+		In server.js, paste the following: 
+<pre>
+<code>
+	var express = require('express');
+var app = express();
+
+
+app.use('/js', express.static(__dirname + '/js'));
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use('/css', express.static(__dirname + '/css'));
+app.use('/partials', express.static(__dirname + '/partials'));
+
+
+
+app.all('/*', function(req, res, next) {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile('index.html', { root: __dirname });
+});
+app.get('/', function (req, res) {
+    res.sendFile('./index.html');
+});
+
+app.listen(3006, function () {
+	"listening on port 3006"
+});
+</code>
+</pre>
+	<p>
+		
+	</p>
+	As you may have noticed, we are serving static files from the js, css, bower_components, partials folder. In your terminal, make all these directories with <strong>mkdir (e.g 'mkdir js')</strong>.
+	This file structure is for serving assets for ui-router. For serving assets for other types of servers, see <a target='_blank' href="https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions#how-to-configure-your-server-to-work-with-html5mode
+"> ui-router's guidelines	</a>
+<p></p>
+	Lastly, for the backend, setup the prerender middleware. Add the following after the last app.use <p>
+	</p>
+
+	<code>
+		app.use(require('prerender-node'));
+	</code>
+
+</p>
+That's the server setup. Time to make the frontend.
+<p>
+	<h2> Angular Frontend</h2>
+	In your terminal, 
+	<br/>
+	<code> bower install angular angular-ui-router --save</code>
+		<br/>
+
+		<code>touch index.html /js/app.js partials/_test.html </code>
+<br/>
+	In your index.html, paste the following: 
+<pre><code>
+			&lt;!DOCTYPE html&gt;
+	&lt;html lang=&quot;en&quot; ng-app=&quot;testApp&quot;&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;UTF-8&quot;&gt;
+		&lt;title&gt;Angular SEO app&lt;/title&gt;
+		&lt;meta name=&quot;fragment&quot; content=&quot;!&quot;&gt;
+		&lt;base href=&quot;/&quot;&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;header&gt;
+		&lt;p&gt; Test App&lt;/p&gt;
+		&lt;/header&gt;
+
+		&lt;div ui-view&gt;
+			
+		&lt;/div&gt;
+		 &lt;script type=&quot;text/javascript&quot; src=&quot;./bower_components/angular/angular.min.js&quot;&gt;&lt;/script&gt; 
+	    &lt;script type=&quot;text/javascript&quot; src=&quot;./bower_components/angular-ui-router/release/angular-ui-router.min.js&quot;&gt;&lt;/script&gt;
+	    &lt;script src=&quot;./js/app.js&quot;&gt;&lt;/script&gt;
+	    &lt;script src=&quot;./js/controllers/TestCtrl.js&quot;&gt;&lt;/script&gt;
+	&lt;/body&gt;
+	&lt;/html&gt;
+</code></pre>
+</p>
+<p>
+	We inserted that fragment metatag in the head. We also set a base to set where the partials will be rendered. 
+	We have an ng-app of testApp and a div with ui-view for ui-router. We also included all the files we created earlier. 
+</p>
+<p>
+	Now, we're going to do some JavaScript. 
+	In your app.js paste the following: <br/>
+<pre><code>
+		angular.module('testApp', ['ui.router'])
+		.config(Router);
+
+		function Router ($locationProvider,$stateProvider, $urlRouterProvider) {
+				$locationProvider.html5Mode(true);
+				// hashbang fall back for older browsers
+				 $locationProvider.hashPrefix = '!';
+			$stateProvider.state('home', {
+	    url: '/',
+	    templateUrl: 'partials/_test.html'
+	  });
+			$urlRouterProvider.otherwise('/');
+		}
+	</code></pre>
+	<p>
+		
+	</p>
+	We injected ui.router in order to set the different pages. We added the route. Then, we include the $locationProvider. The $locationProvider is what ultimately converts are hash links into regular looking urls. I personally hate the angular /#/ and love this simple Angular pushState trick.  
+</p>
+Next we're going to create our test controller.
+In terminal, 
+<br/>
+	<code>mkdir /js/controllers</code>
+	<br/><code>touch /js/controllers/TestCtrl.js</code>
+	<br/>
+ In your TestCtrl.js, add:
+<p>
+	<pre><code>
+		angular.module('testApp')
+	.controller('TestCtrl', function () { 
+		var self = this;
+		self.example = "If this shows with escape_fragment, then it works!";
+	});
+</code>	</pre>
+</p>
+This controller will be used to see if the curly braces are gone and the text is in its place when you test for SEO. 
+<p>
+	To test to see if your Angular works, in your terminal run:
+	<pre><code>
+		node server.js
+	</code></pre>
+	Go to http://localhost:3006 in the browser and you should see 
+	'Test App' and 'If this shows with escape_fragment, then it works!'. We're not done yet, now we have to setup the prerender server to run and compile our Angular app page into HTML. 
+</p>
+<h2> Setting up the Prerender Server</h2>
+ To setup our prerender server, we're going to download <a href="https://github.com/prerender/prerender"> this github repo </a> with git. Cd out of the current directory and go to a different folder in your terminal and type:
+ <pre><code>git clone git@github.com:prerender/prerender.git</code>
+ <code> cd prerender</code>
+ <code>npm install</code>
+ </pre>
+ <p>
+ 	Now that you have the server installed, we need to make one last change. We need to add an environment variable that will tell your App server and its middleware what address your prerender server is on. In your bashprofile or zshrc, add the following:
+ 	<br/>
+
+ 	<code>
+ 			export PRERENDER_SERVICE_URL='http://localhost:3000/'
+ 	</code>
+
+ 	<p>
+ 		If you don't know where it is check here -> (<a href="http://askubuntu.com/questions/29239/where-is-bash-profile">bash </a>/ <a href="http://apple.stackexchange.com/questions/181562/how-to-find-bashrc-or-zshrc">zshrc</a>)
+ 	</p>
+ 	Then in your terminal, 
+ 	for zshrc:
+ 
+ 	<code> source ~/.zshrc </code>
+ 	
+ 	<p></p>
+ 	for bash: 
+
+ 	<code> source ~/.bash_profile </code>
+
+
+<p></p>
+	<h2> Running and Testing</h2>
+	<p>
+	You're almost done! Setup two tabs up in your terminal, each with the two different servers we setup. For each of them, run:
+	</p>
+	<p>
+		<code>node server.js</code>
+	</p>
+	Open chrome and go to: <a href=" http://localhost:3006/?escaped_fragment="> http://localhost:3006/?escaped_fragment=</a>
+	<p>
+		If the text shows, it should be working! Double check by right clicking and viewing the page source. If this shows: 
+		<p></p>
+	
+		<pre><code>
+&lt;div ng-controller=&quot;TestCtrl as test&quot; class=&quot;ng-scope ng-binding&quot;&gt;
+If this shows with escape_fragment, then it works!
+&lt;/div&gt;
+		</code></pre>
+	</p>
+	<p>
+Congrats! Google would be proud. You setup two servers locally, made an Angular app, and are generating SEO friendly HTML. 
+If you noticed anything wrong with this tutorial or need any help, just leave a comment below. If you are still struggling with this, <a target="_blank" href="https://github.com/evanjmg/Angular-SEO-Prerender">download my repo here</a>.
+ </p>
+<p>
+</p>
+Best,
+<br/>
+Evan 
+</div>
