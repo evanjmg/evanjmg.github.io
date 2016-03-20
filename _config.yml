@@ -12,14 +12,18 @@ disqus-shortname: "evanjmg"
 # Navigation bar links
 # Blog link in the blog and post pages will point to the blog.html#blog
 # In the default page it will point to the preview of the last post
-
+syntax-highlighting:
+  enabled : true
+  css: syntax.css
+markdown: redcarpet
+highlighter: pygments
 pages_list:
   About: 'about'
   Blog: 'blog'
   Portfolio: 'portfolio'
   Career: 'career'
   Contact: 'contact'
-
+gems: [jekyll-paginate, pygments.rb]
 background-img: "/img/intro-bg.jpg"
 
 # About variables

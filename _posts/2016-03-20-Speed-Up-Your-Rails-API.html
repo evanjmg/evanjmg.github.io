@@ -1,0 +1,204 @@
+---
+layout: post
+section-type: post
+title: 'Speeding up your Rails API - A Nearby Request'
+date: 2016-03-20 10:30:22.000000000 +01:00
+categories: Code
+
+---
+<img src="/img/posts/sloth-space-with-ruby.gif"style="float:left;padding:35px;max-height: 300px;" alt="">
+I want to search nearby places by keyword or category and get their photos, submitter, and distance. All in one API request! That sounds like a lot of database queries. However, with the right setup, <strong> I got my 3 second request  down to 375ms, making it 10x faster.</strong> 
+
+In this example (click link to skip to topic), I'll cover <a href="#json"> how to speed up your JSON </a>, <a href="#postgres">speed up your Postgres & POSTGIS (get rid of N+1 queries)</a>, and <a href="#carrierwave">speed up Carrierwave</a>. To see the final controller action for this go <a href="#final-action">here</a>. 
+
+<h2 id="json">Speeding up Your Json - Reducing View Render times</h2>
+
+For that crazy nearby request I was talking about, it initially was around 3 seconds. See my original render time here with jBuilder: 
+Completed 200 OK in 2908ms (Views: 2524.5ms | ActiveRecord: 272.5ms)
+
+Ideally, we want that view time to be as short as possible. With OJ or to_json method and a little bit of plain ruby, you can reduce the view time significantly.
+
+To start here are some awesome links on this topic: 
+<br/>
+<a href="http://developers-club.com/posts/226725/">Differences in JSON rendering time</a><br/>
+<a href="https://github.com/intridea/multi_json">Multi_json Gem</a>
+<br/>
+<a href="https://github.com/ohler55/oj">OJ Gem</a>
+
+In my opinion, [DHH](https://en.wikipedia.org/wiki/David_Heinemeier_Hansson) should change the Rails json engine processing to OJ. It is the fastest Rails JSON processing engine and you can replace your engine in three lines of code.
+
+You can still speed up your JSON rendering without using OJ. Simply, do not use jbuilder. It's faster to use the to_json method when you render :json => @item like so:
+
+render :json => @item.to_json	
+
+ The speed difference is not that noticable, but if you have a incredibly large json file to send, it could save you seconds in rendering time. 
+
+<h3>Installing OJ</h3>
+Install OJ by installing the OJ and multi_json gems. In your GemFile, add the following and 'bundle install' in your terminal: 
+
+gem 'oj'<br/>
+gem "multi_json", '~> 1.11'
+
+
+If you use jBuilder, add this to jbuilder.rb:
+{% highlight ruby %}
+MultiJson.use(:oj)
+{% endhighlight%}
+
+<h3>Whether or not to use Jbuilder</h3>
+I still use Jbuilder for a lot of my requests in my apps because of its caching functionality. However, for the large json files I'm sending off I use plain ruby helper methods to generate a serialized hash. You can also use a more ruby-esque class based serialization called<a href="https://github.com/rails-api/active_model_serializers"> Active Model Serializers </a>,but that also has <a href="http://stackoverflow.com/questions/24159723/caching-serializers-fails-to-cache-associations">issues</a> with speed, caching, and customizability. 
+
+Here's a simple <a href="https://richonrails.com/articles/getting-started-with-jbuilder">jBuilder tutorial </a>. You don't have to add anything, multi_json will default to OJ and jBuilder will be faster. To check this, open your rails console('rails c') and run:
+{% highlight ruby %}
+MultiJson.engine
+# should return MultiJson::Adapters::Oj, if not try bundling again
+{% endhighlight%}
+
+<h3 id="plain-ruby">Plain Ruby - The fastest way</h3>
+If you aren't serializing your json and just doing render :json, the best approach is to use the following command on your object:
+
+{% highlight ruby %}
+render :json => MultiJson.dump({ object: @ruby_hash})
+{% endhighlight%}
+Essentially, you want to get your object into hash form and then use MultiJson's dump command, which is similar to JSON.dump, but uses OJ as an adapter. If you have an object, you can use the .map and .attributes like so:
+ {% highlight ruby %}
+	render :json => MultiJson.dump({ items: @items.map { |i| i.attributes } })
+ {% endhighlight%}
+
+ You can also serialize your json (get rid of unwanted variables) in pure ruby with your own helper methods and use .compact to get rid of null values. 
+
+  {% highlight ruby %}
+  	render :json => MultiJson.dump({ items: @items.map { |i| serialize_items(i) } })
+# in private method in the controller or public method in another class
+	def serialize_items(item)
+		json = hashfor(item, %w(name age address email))
+		# other stuff can be added too
+		json['distance'] = get_distance(item)
+		json.compact
+	end
+  def hashfor(model, attributes)
+    res = {}
+    attributes.map do |attr|
+      res[attr] = model.send attr
+    end
+    res
+  end
+   {% endhighlight %}
+
+Your overall speed will vary depending how much json you send down the wire that's why I haven't includes benchmarks for this. You should benchmark your options using the benchmark gem that's already included with ruby, run it with binding.pry (gem 'pry') and see what is the fastest option for you, but recognize that the more processing of the json, the slower your view render time will be. 
+
+<h2 id="#postgres">POSTGRES - Getting rid of N+1 queries with Bullet and Includes</h2>
+Now that we know how to render our json properly, let's focus on speeding up our Postgres queries. The big problem with Rails is n+1 queries. These queries look something like this:
+<img style="max-height: 400px;" src="http://www.benlcollins.com/wp-content/uploads/2015/04/server_log_before.jpg"><br/> (credit: [Ben Collins](http://www.benlcollins.com))
+
+When you make a request for another resource from a resource (like a join table etc) you will end up making n additional requests for each additional resource. An easy way to solve this problem is use Resource.includes method. However, you may take hours to figure out why you are still making n + 1 requests. It's a lot easier to just install a gem that tells you what to do and that gem is bullet (see [this article](http://www.sitepoint.com/silver-bullet-n1-problem/) for the full tutorial)
+
+Add 'gem bullet' to your Gemfile and in your environments/development.rb add the following lines:
+<pre>
+<code>
+  config.after\_initialize do 
+    #Enable bullet in your application
+    Bullet.enable = true 
+    Bullet.rails\_logger = true
+  end  
+</code>  
+</pre>
+<p>
+   Then run your request again, you should get something telling you what to add. If you're not clear, one what I mean look at the bullet [documentation and tutorials](https://github.com/flyerhzm/bullet). 
+</p>
+<p>
+	In my example, I had to include the submitter, a hero/_image, and images because it relied on a model/image.rb.  So I ended up with:
+</p>
+	{% highlight ruby %}
+	@places = Place.includes([:submitter,:heroimage, :images])
+                  .place_search(params[:lon], params[:lat], params[:radius], params[:query]) 
+   {% endhighlight %}
+<p>
+	Just by adding those three, it combines my requests into arrays. Making it look more like so: 
+</p>
+	<img src="/img/posts/includes-query.png" style="max-height: 100px;max-width:500px;padding:10px;text-align:center;" alt="">
+<p>
+Includes is a powerful method. To get a better grasp of it, check out these articles:
+<br/>
+[Eager Loading, Preloading, Includes](http://blog.arkency.com/2013/12/rails4-preloading/)
+<br/>
+	And read the Rails docs here: [Rails docs](http://apidock.com/rails/ActiveRecord/QueryMethods/includes)
+</p>
+<h2 id="#carrierwave">Speeding up Carrierwave - Turn off your Wifi</h2>
+
+So you're probably wondering why your request is still taking so long. The ultimate speed test for your API is to turn off the Internet. So first disable your Internet. Assuming you've followed the [Carrierwave documentation](https://github.com/carrierwaveuploader/carrierwave), you've setup your Amazon Web Services server, and  your Internet is off, your API probably won't render any image urls and will have this error:
+
+<img style="text-align:center;height:200px;"src="/img/posts/aws-error.png" alt=""> 
+
+<p>
+	
+</p>
+If you notice at the bottom there's 'aws', it seems that when you do the image.url method you're requesting information from Amazon Web Services. This is useful for image size data and policies, but we don't need it to serve the image in our API. 
+
+Instead in our application helper or controller, we can write a method to get the image url without having to make a call to AWS. Here's an example for Cloudfront (for s3, simply replace the cloudfront path with your s3 path): 
+
+{% highlight ruby%}
+
+  # Cloudfront
+  def avatar_url(user)
+    if user.avatar_identifier
+       ENV['CLOUDFRONT_URL']+ "/uploads/user/avatar/#{ user.id.to_s }/#{ user.avatar_identifier }"
+    else
+    #your default avatar
+      'https://your-website.com/assets/default_avatar-5f30f9658600f24fbd1390bd77f5bc12.jpg'
+    end    
+  end
+{%endhighlight%}
+
+The .avatar_identifier method gets the name of the file without calling AWS. In this case, my uploader was called AvatarUploader - so if yours is just ImageUploader simply replace avatar with image. 
+
+
+
+<h2 id="final-action">The Final Fast Nearby Places Request</h2>
+
+With the addition of a little bit of POSTGIS (a spherical mapped database adapter for POSTGRES - [tutorial](http://daniel-azuma.com/articles/georails/part-1)) and Postgres search (pg_search gem - [easy gem setup](https://github.com/Casecommons/pg_search)), I can make quite an awesome and fast nearby request. 
+Here’s what request had in the end: 
+
+Speed: 'Completed 200 OK in 375ms (Views: 0.1ms | ActiveRecord: 279.6ms)''
+
+{% highlight ruby %}
+@places = Place.includes([:submitter,:hero_image, :images])
+# I used bullet to identify these above - the order matters!
+                  
+              # I used postgres search - see the model below for the .search method  
+               .place_search(params[:lon], params[:lat], params[:radius], params[:query]) 
+
+							# this query calculates  and orders by distance 
+							# all my objects have a lonlat spherical object 
+               .select("*,ST_Distance(lonlat,
+               ST_MakePoint(#{params[:lon]},#{params[:lat]})) as distance")
+                .order('distance')
+
+		# this is the optimized json using OJ
+  	render :json => MultiJson.dump({
+      places: @places.map { |i| serialize_item(i) } })
+
+  # in model - Place.rb
+  include PgSearch
+   pg_search_scope :search,  :against => [
+                                          [:name, 'A'], 
+                                          [:category_name, 'B'],
+                                           :review_text
+                                         ],
+                  :using => {
+                    :tsearch => {:prefix => true, :dictionary => "english"}
+                  }
+  def self.place_search(lon, lat, radius, query)
+    Place.where("ST_DWithin(lonlat, ST_MakePoint(#{lon},#{lat}), #{radius})").search(query)
+  end
+{% endhighlight %}
+
+<h2 id="conclusion">What You've Learned</h2>
+Hopefully this is helpful to someone who struggles with cramming POSTGIS, Carrierwave, PG_SEARCH, and a lot of JSON into one big request. If you have any questions comment below and I can point you in the right direction. If you notice anything wrong with these snippets, please let me know. 
+
+Happy Coding.
+
+Cheers,
+
+Evan Gillogley 
+

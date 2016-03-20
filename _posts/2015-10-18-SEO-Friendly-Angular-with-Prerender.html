@@ -70,24 +70,16 @@ categories: Code
 </p>
 		<h2> Backend - Express Application</h2>
 		Find an empty directory. If prompted for other things, just press enter (for bower's type use node). In your terminal, enter the following:
-		<code> npm install express prerender-node --save
-		  </code>
-		<br/>
-		  <code>
-		  	bower init
-		  </code>
-		  <br/>
-		  <code>
-		  	npm init
-		  </code>
-		  <br/>
-		  <code>
-		  	touch server.js
-		  </code>
+	{% highlight text %}
+	npm install express prerender-node --save
+	bower init
+	npm init
+	touch server.js
+{% endhighlight %}
 		  <p></p>
 		In server.js, paste the following: 
-<pre>
-<code>
+
+	{% highlight javascript %}
 	var express = require('express');
 var app = express();
 
@@ -110,8 +102,7 @@ app.get('/', function (req, res) {
 app.listen(3006, function () {
 	"listening on port 3006"
 });
-</code>
-</pre>
+{% endhighlight %}
 	<p>
 		
 	</p>
@@ -170,7 +161,7 @@ That's the server setup. Time to make the frontend.
 <p>
 	Now, we're going to do some JavaScript. 
 	In your app.js paste the following: <br/>
-<pre><code>
+	{% highlight javascript %}
 		angular.module('testApp', ['ui.router'])
 		.config(Router);
 
@@ -184,7 +175,7 @@ That's the server setup. Time to make the frontend.
 	  });
 			$urlRouterProvider.otherwise('/');
 		}
-	</code></pre>
+	{% endhighlight %}
 	<p>
 		
 	</p>
@@ -198,13 +189,13 @@ In terminal,
 	<br/>
  In your TestCtrl.js, add:
 <p>
-	<pre><code>
+	{% highlight javascript %}
 		angular.module('testApp')
 	.controller('TestCtrl', function () { 
 		var self = this;
 		self.example = "If this shows with escape_fragment, then it works!";
 	});
-</code>	</pre>
+	{% endhighlight %}
 </p>
 This controller will be used to see if the curly braces are gone and the text is in its place when you test for SEO. 
 <p>
