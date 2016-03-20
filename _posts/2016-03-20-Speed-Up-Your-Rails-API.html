@@ -1,11 +1,20 @@
 ---
 layout: post
 section-type: post
-title: 'Speeding up your Rails API - A Nearby Request'
+title: 'Speeding up your Rails API Requests'
 date: 2016-03-20 10:30:22.000000000 +01:00
 categories: Code
 
 ---
+<style>
+	@media screen and (max-width: 600px) {
+    img {
+       clear:both !important;
+				display: block;
+				float:none !important;
+    }
+}
+</style>
 <img src="/img/posts/sloth-space-with-ruby.gif"style="float:left;padding:35px;max-height: 300px;" alt="">
 I want to search nearby places by keyword or category and get their photos, submitter, and distance. All in one API request! That sounds like a lot of database queries. However, with the right setup, <strong> I got my 3 second request  down to 375ms, making it 10x faster.</strong> 
 
