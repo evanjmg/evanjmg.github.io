@@ -16,13 +16,13 @@ categories: Code
 }
 </style>
 <img src="/img/posts/sloth-space-with-ruby.gif"style="float:left;padding:35px;max-height: 300px;" alt="">
-I want to search nearby places by keyword or category and get their photos, submitter, and distance. All in one API request! That sounds like a lot of database queries. However, with the right setup, <strong> I got my 3 second request  down to 375ms, making it 10x faster.</strong> 
+I want to search nearby places by keyword and get their photos, submitter, and distance. All in one API request! That sounds like a lot of database queries. However, with the right setup, <strong> I got my 3 second request  down to 375ms, making it 10x faster.</strong> 
 
-In this example (click link to skip to topic), I'll cover <a href="#json"> how to speed up your JSON </a>, <a href="#postgres">speed up your Postgres & POSTGIS (get rid of N+1 queries)</a>, and <a href="#carrierwave">speed up Carrierwave</a>. To see the final controller action for this go <a href="#final-action">here</a>. 
+In this example, I'll cover <a href="#json"> how to speed up your JSON </a>, <a href="#postgres">speed up your Postgres & POSTGIS (get rid of N+1 queries)</a>, and <a href="#carrierwave">speed up Carrierwave</a>. To see the final controller action for this go <a href="#final-action">here</a>. 
 
 <h2 id="json">Speeding up Your Json - Reducing View Render times</h2>
 
-For that crazy nearby request I was talking about, it initially was around 3 seconds. See my original render time here with jBuilder: 
+For that crazy nearby request I was talking about, it initially was around 3 seconds. My original render time here with jBuilder: 
 Completed 200 OK in 2908ms (Views: 2524.5ms | ActiveRecord: 272.5ms)
 
 Ideally, we want that view time to be as short as possible. With OJ or to_json method and a little bit of plain ruby, you can reduce the view time significantly.
