@@ -113,10 +113,10 @@ Add 'gem bullet' to your Gemfile and in your environments/development.rb add the
 </code>  
 </pre>
 <p>
-   Then run your request again, you should get something telling you what to add. If you're not clear, one what I mean look at the bullet [documentation and tutorials](https://github.com/flyerhzm/bullet). 
+   Then run your request again, you should get something telling you what to add. If you're not understanding the logs,look at the bullet's [documentation and tutorials](https://github.com/flyerhzm/bullet). 
 </p>
 <p>
-	In my example, I had to include the submitter, a hero/_image, and images because it relied on a model/image.rb.  So I ended up with:
+	In my example, I have to include the submitter, a hero/_image, and images because it relied on a model/image.rb.  So I ended up with:
 </p>
 	{% highlight ruby %}
 	@places = Place.includes([:submitter,:heroimage, :images])
