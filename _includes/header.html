@@ -10,7 +10,19 @@
 		    <a href="#{{ site.pages_list['About'] }}" class="page-scroll">
 			<img class="img-me" src="{{ site.me-img }}" alt="">
 		    </a>
+
                 </div>
+            </div>
+            <div class="row">
+            <p></p>
+                <h4 style="text-align: center">Web Developer | Masters Student</h3>
+            </div>
+            <div class="row">
+                <ul class="list-inline social-buttons">
+                  {% for network in site.social %}
+                    <li><a href="{{ network.url }}" target="_blank"><i class="fa fa-{{ network.title }} "></i></a></li>
+                  {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
