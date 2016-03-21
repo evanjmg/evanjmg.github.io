@@ -64,3 +64,8 @@ a.panel-text-item {
   font-size: 20px;
 }
 }
+.intro-text {
+  padding-top: 30px;
+  margin:0 !important;
+  margin-top: 0px !important;
+  }
