@@ -45,13 +45,13 @@ reddit-share: True
 
 events:
   - image: "/img/career/glp.png"
-    date: "October 2015 - Present"
-    description: "Web Developer @ Great Little Place"
+    date: "October 2015 - May 2016"
+    description: "Lead Full Stack Web Developer @ Great Little Place"
   - image: "/img/career/general-assembly.png"
     date: "June 2015 - Sept 2015"
     description: "Student @ General Assembly, Web Development Immersive course, focusing on Node.js, Rails, and Angular"
   - image: "/img/career/GCULondon.png"
-    date: "Jan 2015 - Present"
+    date: "Jan 2015 - May 2016"
     description: "MSc International Marketing @ <a href=\"http://www.di.uoa.gr/eng\" target=\"_blank\">Glasgow Caledonian University</a> - Emphasis: Digital Marketing"
   - image: "/img/career/bbb-logo.png"
     date: "March 2014 - Jan 2015"
