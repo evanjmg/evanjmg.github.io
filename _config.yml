@@ -45,7 +45,7 @@ reddit-share: True
 
 events:
   - image: "/img/career/glp.png"
-    date: "October 2015 - May 2016"
+    date: "October 2015 - June 2016"
     description: "Lead Full Stack Web Developer @ Great Little Place"
   - image: "/img/career/general-assembly.png"
     date: "June 2015 - Sept 2015"
