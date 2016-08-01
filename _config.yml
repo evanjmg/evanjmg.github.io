@@ -44,6 +44,9 @@ reddit-share: True
 # Career variables
 
 events:
+  - image: '/img/career/velocity.png'
+    date: 'June 2016 - Present'
+    description: 'Front End Developer'
   - image: "/img/career/glp.png"
     date: "October 2015 - June 2016"
     description: "Lead Full Stack Web Developer @ Great Little Place"
