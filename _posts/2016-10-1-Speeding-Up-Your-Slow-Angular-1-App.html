@@ -1,0 +1,66 @@
+---
+layout: post
+section-type: post 
+title: 'Speeding Up your Slow Angular 1 App'
+date: 2016-10-1 10:30:22.000000000 +01:00
+categories: Code
+---
+<style>
+@media screen and (max-width: 600px) {
+    img {
+        clear: both !important;
+        display: block;
+        float: none !important;
+    }
+}
+</style>
+All experienced developers know Angular 1 is slow and it will take a lot of effort on your part to make it fast. Here, I'll highlight all of my tricks to speed up your Angular 1 app. Some of these are quite general, meaning you can apply them also to Angular 2, to other frameworks you use or other websites you build. First, I'll cover some essential techniques that you must have in order to have a fast Angular app and then I'll make some suggestions.
+<h2>Essentials</h2>
+<h3 id="Gzip">Gzip, Minifiy and Cache bust Everything</h3>
+
+<strong>Gzipping</strong> is the process of compressing your files on your server and sending the compressed file to the user. The user's browser will decompress the file automatically. This is quite easy to do on the server side. If your files don't change it's best to pre-compress the files once, rather than have them requested
+
+<strong>Cache Busting</strong> allows you to send a updated version of a file to the user even though they already have the old one cached. In order to add file caching to your website you need to add a Cache-Control header setting the expiry time (1 year is fine if you Cache bust). Once the header is set, your user will keep that file until you update and cache bust it or the specified expiry time expires. For Gulp, you can use gulp-rev and gulp-rev-del to create gulp tasks that will rename your files with hashed strings - e.g app.js to app-2124151e.js. Do caching for all your assets except images.
+
+<strong> Minification </strong> is simply getting rid of unnecessary whitespace and long variables. When minifying an angular app, it's important you match your dependencies with strings as minifying javascript with Uglify can mangle your dependencies. Mangling is when your variable names are changed in order to make the code shorter. It's important to match strings with the dependency name in order to import the appropriate dependency.
+
+Before: 
+
+After:
+
+<h3 id="batarang">Use Angular Batarang to Help Identify and Reduce Watchers</h3>
+Angular Batarang's performance tab can really help identify what expressions have the most watchers. Once you identify, these expressions you can put two colons in front of your expression like so ::(expression). This is what's called a 1 time bind, it's pretty much saying that the view is a read-only value, it will never change unless the scope of the component is destroyed. Thus, it will just stay there if your directive/component or view does not change.
+<h3 id="destroy non-angular events">Remove Non Angular Events on Scope Destroy</h3>
+If you use Event Listeners without using Angular, such as document.addEventListener, you must unbind the listener when the scope is destroyed. Unbinding these events will reduce the overall load on your app and thus speed up your code. 
+
+<h3 id="lazy-load">Lazy Load as Much as Possible</h3>
+Lazy loading allows you to load modules and assets after the initialization/boostrap of the Angular app. Currently, the only solution for Angular 1 is ocLazyLoad. OcLazyLoad allows you to lazy load routes, JS libraries, templates, and even css. Luckily if you're starting an Angular 2 project, lazyloading is built in, use it. Some libraries that are a must to lazy load 
+  - Angular Google Maps
+  - Stripe
+  - Flickity
+  - Any UI libraries that you only use on one page
+  - Validation libraries 
+<h3 id="one-time-bind">One-Time Bind as much as possible</h3> 
+
+In addition to finding the expressions in Batarang, you need to always think one-time bind first when developing. Use one time binds and 1.5+ components as much as possible. These components have one time binds built in and are efficient in handling the isolate scope.
+<h3 id="disable-debug">Disable Angular Debugging mode when in Production</h3> 
+{% highlight javascript %} 
+angular.module('myApp')
+      .config(['$compileProvider',function($compileProvider) { $compileProvider.debugInfoEnabled(false);
+      }])
+ {% endhighlight %} 
+
+
+<h2>Optional</h2>
+
+<h3 id="delete-unused-code">Delete unused modules from external libraries</h3>
+Fork an npm module in your own git repo and trim it down. I do this with unnecessarily large libraries, such as Angular Google Maps (182kb!!). You can get rid of a good 50kb or more when you trim out things you don't use like street view, 
+Also, frameworks like Angular and Angular UI Bootstrap allow you to import the modules individually. This is a lot easier than going through the code line by line. 
+
+<h3 id="use-a-lazy-image-loader">Lazy Load Images</h3>
+In addition to lazy loading your modules and assets. It's important to only load the images the user sees on the page. There are quite a few pure javascript solutions for this. The best I've found for performance (if you can afford it) is Cloudflare's Mirage. Mirage also uses Javascript and will lazy load any images that appear. Other Angular driven solutions involve watchers which can be a performance cost. However, that extra watcher will ensure that your initial page load is still a lot faster. 
+
+If you notice anything wrong with these snippets or disagree with my advice, please let me know. 
+Happy Coding.
+
+ Cheers, Evan Gillogley
