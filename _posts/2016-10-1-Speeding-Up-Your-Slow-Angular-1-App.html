@@ -1,6 +1,6 @@
 ---
 layout: post
-section-type: post 
+section-type: post
 title: 'Speeding Up your Slow Angular 1 App'
 date: 2016-10-1 10:30:22.000000000 +01:00
 categories: Code
@@ -24,43 +24,60 @@ All experienced developers know Angular 1 is slow and it will take a lot of effo
 
 <strong> Minification </strong> is simply getting rid of unnecessary whitespace and long variables. When minifying an angular app, it's important you match your dependencies with strings as minifying javascript with Uglify can mangle your dependencies. Mangling is when your variable names are changed in order to make the code shorter. It's important to match strings with the dependency name in order to import the appropriate dependency.
 
-Before: 
-
-After:
 
 <h3 id="batarang">Use Angular Batarang to Help Identify and Reduce Watchers</h3>
 Angular Batarang's performance tab can really help identify what expressions have the most watchers. Once you identify, these expressions you can put two colons in front of your expression like so ::(expression). This is what's called a 1 time bind, it's pretty much saying that the view is a read-only value, it will never change unless the scope of the component is destroyed. Thus, it will just stay there if your directive/component or view does not change.
 <h3 id="destroy non-angular events">Remove Non Angular Events on Scope Destroy</h3>
-If you use Event Listeners without using Angular, such as document.addEventListener, you must unbind the listener when the scope is destroyed. Unbinding these events will reduce the overall load on your app and thus speed up your code. 
+If you use Event Listeners without using Angular, such as document.addEventListener, you must unbind the listener when the scope is destroyed. Unbinding these events will reduce the overall load on your app and thus speed up your code.
 
 <h3 id="lazy-load">Lazy Load as Much as Possible</h3>
-Lazy loading allows you to load modules and assets after the initialization/boostrap of the Angular app. Currently, the only solution for Angular 1 is ocLazyLoad. OcLazyLoad allows you to lazy load routes, JS libraries, templates, and even css. Luckily if you're starting an Angular 2 project, lazyloading is built in, use it. Some libraries that are a must to lazy load 
+Lazy loading allows you to load modules and assets after the initialization/boostrap of the Angular app. Currently, the only solution for Angular 1 is ocLazyLoad. OcLazyLoad allows you to lazy load routes, JS libraries, templates, and even css. Luckily if you're starting an Angular 2 project, lazyloading is built in, use it. Some libraries that are a must to lazy load
   - Angular Google Maps
   - Stripe
   - Flickity
   - Any UI libraries that you only use on one page
-  - Validation libraries 
-<h3 id="one-time-bind">One-Time Bind as much as possible</h3> 
+  - Validation libraries
+  <p>
+
+  </p>
+<h3 id="one-time-bind">One-Time Bind as much as possible</h3>
 
 In addition to finding the expressions in Batarang, you need to always think one-time bind first when developing. Use one time binds and 1.5+ components as much as possible. These components have one time binds built in and are efficient in handling the isolate scope.
-<h3 id="disable-debug">Disable Angular Debugging mode when in Production</h3> 
-{% highlight javascript %} 
+
+<h3 id="disable-debug">Disable Angular Debugging mode when in Production</h3>
+
+{% highlight javascript %}
 angular.module('myApp')
       .config(['$compileProvider',function($compileProvider) { $compileProvider.debugInfoEnabled(false);
       }])
- {% endhighlight %} 
+ {% endhighlight %}
 
 
 <h2>Optional</h2>
 
+<h3 id="speedup-http">Speed up Http Requests</h3>
+Use:
+{% highlight javascript %}
+mymodule.config(function ($httpProvider) {
+  $httpProvider.useApplyAsync(true);
+});
+ {% endhighlight %}
+
+ This will make it so that your http requests all fire within the same $scope.applyAsync(), meaning that it will execute less code and iterations in the digest cycle.
+
 <h3 id="delete-unused-code">Delete unused modules from external libraries</h3>
-Fork an npm module in your own git repo and trim it down. I do this with unnecessarily large libraries, such as Angular Google Maps (182kb!!). You can get rid of a good 50kb or more when you trim out things you don't use like street view, 
-Also, frameworks like Angular and Angular UI Bootstrap allow you to import the modules individually. This is a lot easier than going through the code line by line. 
+Fork an npm module in your own git repo and trim it down. I do this with unnecessarily large libraries, such as Angular Google Maps (182kb!!). You can get rid of a good 50kb or more when you trim out things you don't use like street view,
+Also, frameworks like Angular and Angular UI Bootstrap allow you to import the modules individually. This is a lot easier than going through the code line by line.
 
 <h3 id="use-a-lazy-image-loader">Lazy Load Images</h3>
-In addition to lazy loading your modules and assets. It's important to only load the images the user sees on the page. There are quite a few pure javascript solutions for this. The best I've found for performance (if you can afford it) is Cloudflare's Mirage. Mirage also uses Javascript and will lazy load any images that appear. Other Angular driven solutions involve watchers which can be a performance cost. However, that extra watcher will ensure that your initial page load is still a lot faster. 
+In addition to lazy loading your modules and assets. It's important to only load the images the user sees on the page. There are quite a few pure javascript solutions for this. The best I've found for performance (if you can afford it) is Cloudflare's Mirage. Mirage also uses Javascript and will lazy load any images that appear. Other Angular driven solutions involve watchers which can be a performance cost. However, that extra watcher will ensure that your initial page load is still a lot faster.
 
-If you notice anything wrong with these snippets or disagree with my advice, please let me know. 
+<h3 id="compress-images">Compress Images and Assets with Imagemin and/or Kraken.io </h3>
+
+The node [imagemin](https://github.com/imagemin/imagemin) plugin (search gulp-imagemin or grunt-imagemin) allows you to compress svgs, icons, and images through minification. You can also use professional compression services such as Kraken.io to better compress your assets. This is perhaps the most important thing for initial page load times for mobile.
+
+
+If you notice anything wrong with these snippets or disagree with my advice, please let me know.
 Happy Coding.
 
  Cheers, Evan Gillogley
