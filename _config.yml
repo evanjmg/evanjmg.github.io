@@ -46,7 +46,7 @@ reddit-share: True
 events:
   - image: '/img/career/velocity.png'
     date: 'June 2016 - Present'
-    description: 'Front End Developer @ Velocity - Emphasis: Typescript, Angular, & React'
+    description: "Front End Web Developer @ <a href='https://velocityapp.com' target='_blank'>Velocity</a> - Emphasis: Typescript, Angular, & React"
   - image: "/img/career/glp.png"
     date: "October 2015 - June 2016"
     description: "Lead Full Stack Web Developer @ Great Little Place"
@@ -58,7 +58,7 @@ events:
     description: "MSc International Marketing @ <a href=\"http://www.di.uoa.gr/eng\" target=\"_blank\">Glasgow Caledonian University</a> - Emphasis: Digital Marketing"
   - image: "/img/career/bbb-logo.png"
     date: "March 2014 - Jan 2015"
-    description: "Communications Specialist @ <a href=\'http://http://www.bbb.org/northeast-california'>Better Business Bureau</a>. I developed and implemented digital marketing campaigns and managed the website."
+    description: "Communications Specialist @ <a target='_blank' href=\'http://http://www.bbb.org/northeast-california'>Better Business Bureau</a>. I developed and implemented digital marketing campaigns and managed the website."
   - image: "/img/career/ucsb-logo.png"
     date: "September 2010 - December 2013"
     description: "Bachelor of Arts in Economics and Film & Media Studies from UC Santa Barbara"
