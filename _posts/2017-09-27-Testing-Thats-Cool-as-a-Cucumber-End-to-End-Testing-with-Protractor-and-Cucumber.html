@@ -1,0 +1,180 @@
+---
+layout: post
+section-type: post
+title: "Testing That’s Cool as a Cucumber: End to End Testing with Protractor, Typescript, and Cucumber"
+date: 2017-09-28 10:30:22.000000000 +01:00
+categories: Code
+---
+<style>
+@media screen and (max-width: 600px) {
+    img {
+        clear: both !important;
+        display: block;
+        float: none !important;
+    }
+}
+</style>
+
+If I'm building a UI that needs to scale and support hundreds of users and never fail, I need to write tests. But tests are cumbersome and require "coders" knowledge and lots of unecessary time. However, not all tests take a long time to write. In fact, some require little to no coders knowledge.
+
+
+The simplest testing library I know is cucumber and it's description, explains it all:
+<blockquote cite="http://www.worldwildlife.org/who/index.html">
+Cucumber is a tool for running automated tests written in plain language. Because they're written in plain language, they can be read by anyone on your team. Because they can be read by anyone, you can use them to help improve communication, collaboration and trust on your team.
+</blockquote>
+
+
+
+Here's a small snippet from the tests
+{% highlight gherkin %}
+
+Feature: Details Form
+  Background:
+    Given I am on the page: "/restaurant/2"
+    Given I begin with hydrated state
+    Given Wait until ".time-selector-button" appears
+    Given Click element with css, ".time-selector-button.clickable"
+    Given I wait 5 seconds
+    Given Scroll top
+  Scenario: Fail to Submit Empty Form
+    Given Scroll bottom
+    Given Submit Form
+    Then I should see the message: "Email is invalid"
+    Then I should see the message: "Phone not recognized"
+    Then I should see the message: "Last Name is required"
+    Then I should see the message: "First Name is required"
+  Scenario: Fail to Submit With Filled In First Name
+    Given Type "Evan" into "firstName"
+    Given Scroll bottom
+    Given Submit Form
+    Then I should see the message: "Email is invalid"
+    Then I should see the message: "Phone not recognized"
+    Then I should see the message: "Last Name is required"
+    Then I should not see the message: "First Name is required"
+  Scenario: Fail to Submit With Filled In Last and First Name
+    Given Type "Evan" into "firstName"
+    Given Type "Gillogley" into "lastName"
+    Given Scroll bottom
+    Given Submit Form
+    Then I should see the message: "Email is invalid"
+    Then I should see the message: "Phone not recognized"
+    Then I should not see the message: "Last Name is required"
+    Then I should not see the message: "First Name is required"
+
+ {% endhighlight %}
+
+These are called features. Each feature has a scenario which covers tests. Each step is essentially a test. When it runs it will be either green or red. If the command is not recognized it will be yellow. Although it doesn't take a developer to write these scripts above, it will take a developer to setup the environment. Luckily, I built a starter.
+
+
+## Running your first test
+Now, let's go over an example here: (https://github.com/evanjmg/EndToEndStarter)
+It requires node and Java, please follow the instructions in the repo for setup.
+Once your all setup (after npm install and installing Java as instructed),
+you'll want to run `npm run pree2e`
+
+Then you want to start the server:
+`npm run watch`
+
+After it's launched, you can run your tests:
+`npm run test:e2e`
+
+For safari, you'll need to enable automation under the develop tab.
+
+You should get the following:
+
+{% highlight gherkin %}
+
+[23:20:15] I/testLogger - [chrome macOS 10.12 #01] PID: 12702
+[chrome macOS 10.12 #01] Specs: /Users/evanjmg/Desktop/development/practice/e2e-starter/test/e2e/features/counter/counter.feature
+[chrome macOS 10.12 #01]
+[chrome macOS 10.12 #01] [23:20:04] I/local - Starting selenium standalone server...
+[chrome macOS 10.12 #01] [23:20:05] I/local - Selenium standalone server started at http://192.168.1.161:62728/wd/hub
+[chrome macOS 10.12 #01] Feature: Counter
+[chrome macOS 10.12 #01]
+[chrome macOS 10.12 #01]   Scenario: Button should exist
+[chrome macOS 10.12 #01]     Given I am on the homepage
+[chrome macOS 10.12 #01] [23:20:13] W/element - more than one element found for locator By(css selector, button) - the first result will be used
+[chrome macOS 10.12 #01]     Then There should be an element called "button"
+[chrome macOS 10.12 #01]
+[chrome macOS 10.12 #01]   Scenario: Button should increment
+[chrome macOS 10.12 #01] [23:20:14] W/element - more than one element found for locator By(css selector, button) - the first result will be used
+[chrome macOS 10.12 #01]     Given Click element with css, "button"
+[chrome macOS 10.12 #01]     Then I should see the message: "1"
+[chrome macOS 10.12 #01]
+[chrome macOS 10.12 #01] 2 scenarios (2 passed)
+[chrome macOS 10.12 #01] 4 steps (4 passed)
+[chrome macOS 10.12 #01] 0m01.703s
+[chrome macOS 10.12 #01] [23:20:15] I/local - Shutting down selenium standalone server.
+
+{% endhighlight %}
+
+You're probably wondering where's all magic. There are bits of code you need to write to match the selenium commands, but after writing a simple set of steps. They actually are called steps. They are regex matchers to the commands above. These are very flexible, I've built up about 20 or so that I use to write massive suites that test really complex user flows, some up to 10 minutes long!
+Here are the following 'steps' from the test above:
+
+
+{% highlight javascript %}
+
+ this.Given(/^Click element with css, "([^"]*)"$/, function (arg1: string): promise.Promise<any> {
+    return element(by.css(arg1)).click()
+ })
+ this.Then(/^There should be an element called "([^"]*)"$/, function (arg1: string): Chai.PromisedAssertion {
+    return expect(element(by.css(arg1)).isDisplayed()).to.eventually.equal(true)
+ })
+ this.Then(/^I should see the message: "([^"]*)"$/, function(arg1: string): Chai.PromisedAssertion {
+   return expect(element(by.css('body')).getText()).to.eventually.include(arg1)
+ })
+ this.Given(/^I am on the homepage$/, function (): promise.Promise<any> {
+   return browser.get('/')
+ })
+
+
+{% endhighlight %}
+
+The statements are matched through regex and the "" area is where I fill in the value I want to pass through to a function.
+Then I take that value and use protractor, a javascript library that serves as a wrapper around selenium webdriver - a testing driver, to run the commands.
+
+Seems easy right? That was just one live server example, what about a really complex UI like...
+
+## Dragging and Dropping
+
+I built a grid view demo earlier this year using D3 and ideally I'd like to test if I can drag and add items to the grid.
+
+Here's the grid:
+(https://bl.ocks.org/evanjmg/raw/c2ffda2df9748e56425194eb5e6ea878/73d2cee03e1f8aedbc9127f0fa429fea7f1a171e/)
+
+Now, let's see if we can debug this.
+
+`npm run debug:e2e`
+
+You should get a cli command prompt in your terminal.
+
+Before we start using those same protractor commands like 'browser.get('/')', we're going to need tell protractor that we're not using Angular with:
+`browser.ignoreSynchronization = true`
+
+After, we need to go to the page we want to test (this could be anything you want!).
+`browser.get('https://bl.ocks.org/evanjmg/raw/c2ffda2df9748e56425194eb5e6ea878/73d2cee03e1f8aedbc9127f0fa429fea7f1a171e/')
+`
+
+Now let's create a square programmatically:
+{% highlight javascript %}
+ browser.driver.actions().mouseDown(element(by.css('.rectButton'))).mouseUp().mouseMove({ x: 300, y: 100 }).mouseDown().perform()
+{% endhighlight %}
+
+And it should add a square to the grid view!
+
+Now let's move it!
+In order to do so, you need to cmd + j (ctrl + j - windows) to inspect the browser and look for the element's position. In this case, I have an item on x=400, so I'll grab it and move it:
+{% highlight javascript %}
+ browser.driver.actions().mouseDown(element(by.css('.table-graphic[x="400"]'))).mouseMove({ x: 300, y: 100 }).mouseUp().perform()
+{% endhighlight %}
+
+ Note that x: 300 is not the position on the grid view but the pixel position on the browser. So you won't get one to one matching, because of zoom etc in this grid view
+
+ What's next? Test other UIs like Fullcalendar (https://fullcalendar.io/) or implement cucumber protractor in your own app. Here are some great resources to get you started:
+ - Don't like Typescript? Here's a good Javascript example: https://github.com/mlev/protractor-cucumber-example
+ - Learn more about protractor here: http://www.protractortest.org/#/
+ - Learn more about cucumber: https://cucumber.io/
+ - Love this cool typescript syntax? Check out Typescript: https://www.typescriptlang.org/
+ - Here's Protractor Cucumber  (the bit that connects them together): https://github.com/protractor-cucumber-framework/protractor-cucumber-framework
+
+ If you have any questions or suggestions, please leave them in the comments.
