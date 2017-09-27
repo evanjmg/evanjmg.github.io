@@ -82,7 +82,7 @@ For safari, you'll need to enable automation under the develop tab.
 
 You should get the following:
 
-{% highlight gherkin %}
+{% highlight cucumber %}
 
 [23:20:15] I/testLogger - [chrome macOS 10.12 #01] PID: 12702
 [chrome macOS 10.12 #01] Specs: /Users/evanjmg/Desktop/development/practice/e2e-starter/test/e2e/features/counter/counter.feature
@@ -112,7 +112,7 @@ You're probably wondering where's all magic. There are bits of code you need to 
 Here are the following 'steps' from the test above:
 
 
-{% highlight javascript %}
+{% highlight typescript %}
 
  this.Given(/^Click element with css, "([^"]*)"$/, function (arg1: string): promise.Promise<any> {
     return element(by.css(arg1)).click()
