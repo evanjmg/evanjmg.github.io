@@ -139,8 +139,7 @@ Seems easy right? That was just one live server example, what about a really com
 
 I built a grid view demo earlier this year using D3 and ideally I'd like to test if I can drag and add items to the grid.
 
-Here's the grid:
-(https://bl.ocks.org/evanjmg/raw/c2ffda2df9748e56425194eb5e6ea878/73d2cee03e1f8aedbc9127f0fa429fea7f1a171e/)
+[Click here for the grid](https://bl.ocks.org/evanjmg/raw/c2ffda2df9748e56425194eb5e6ea878/73d2cee03e1f8aedbc9127f0fa429fea7f1a171e/)
 
 Now, let's see if we can debug this.
 
@@ -152,8 +151,9 @@ Before we start using those same protractor commands like 'browser.get('/')', we
 `browser.ignoreSynchronization = true`
 
 After, we need to go to the page we want to test (this could be anything you want!).
-`browser.get('https://bl.ocks.org/evanjmg/raw/c2ffda2df9748e56425194eb5e6ea878/73d2cee03e1f8aedbc9127f0fa429fea7f1a171e/')
-`
+{% highlight javascript %}
+browser.get('https://bl.ocks.org/evanjmg/raw/c2ffda2df9748e56425194eb5e6ea878/73d2cee03e1f8aedbc9127f0fa429fea7f1a171e/')
+{% endhighlight %}
 
 Now let's create a square programmatically:
 {% highlight javascript %}
