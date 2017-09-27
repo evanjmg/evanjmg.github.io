@@ -82,7 +82,7 @@ For safari, you'll need to enable automation under the develop tab.
 
 You should get the following:
 
-{% highlight cucumber %}
+{% highlight gherkin %}
 
 [23:20:15] I/testLogger - [chrome macOS 10.12 #01] PID: 12702
 [chrome macOS 10.12 #01] Specs: /Users/evanjmg/Desktop/development/practice/e2e-starter/test/e2e/features/counter/counter.feature
@@ -112,7 +112,7 @@ You're probably wondering where's all magic. There are bits of code you need to 
 Here are the following 'steps' from the test above:
 
 
-{% highlight typescript %}
+{% highlight javascript %}
 
  this.Given(/^Click element with css, "([^"]*)"$/, function (arg1: string): promise.Promise<any> {
     return element(by.css(arg1)).click()
@@ -170,11 +170,11 @@ In order to do so, you need to cmd + j (ctrl + j - windows) to inspect the brows
 
  Note that x: 300 is not the position on the grid view but the pixel position on the browser. So you won't get one to one matching, because of zoom etc in this grid view
 
- What's next? Test other UIs like Fullcalendar (https://fullcalendar.io/) or implement cucumber protractor in your own app. Here are some great resources to get you started:
- - Don't like Typescript? Here's a good Javascript example: https://github.com/mlev/protractor-cucumber-example
- - Learn more about protractor here: http://www.protractortest.org/#/
- - Learn more about cucumber: https://cucumber.io/
- - Love this cool typescript syntax? Check out Typescript: https://www.typescriptlang.org/
- - Here's Protractor Cucumber  (the bit that connects them together): https://github.com/protractor-cucumber-framework/protractor-cucumber-framework
+ What's next? Test other UIs like Fullcalendar, [https://fullcalendar.io/], or implement cucumber protractor in your own app. Here are some great resources to get you started:
+ - Don't like Typescript? Here's a good Javascript example: [https://github.com/mlev/protractor-cucumber-example]
+ - Learn more about protractor here: [http://www.protractortest.org/#/]
+ - Learn more about cucumber: [https://cucumber.io/]
+ - Love this cool typescript syntax? Check out Typescript: [https://www.typescriptlang.org/]
+ - Here's Protractor Cucumber  (the bit that connects them together): [https://github.com/protractor-cucumber-framework/protractor-cucumber-framework]
 
  If you have any questions or suggestions, please leave them in the comments.
