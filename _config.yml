@@ -15,7 +15,7 @@ disqus-shortname: "evanjmg"
 syntax-highlighting:
   enabled : true
   css: syntax.css
-markdown: redcarpet
+markdown: kramdown
 highlighter: rouge
 pages_list:
   About: 'about'
