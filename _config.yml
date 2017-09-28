@@ -16,7 +16,7 @@ syntax-highlighting:
   enabled : true
   css: syntax.css
 markdown: redcarpet
-highlighter: pygments
+highlighter: rouge
 pages_list:
   About: 'about'
   Blog: 'blog'
