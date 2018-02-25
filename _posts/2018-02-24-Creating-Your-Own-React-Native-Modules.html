@@ -1,0 +1,189 @@
+---
+layout: post
+section-type: post
+title: "Creating React Native Modules for Android"
+date: 2018-02-25 01:30:22.000000000 +01:00
+categories: Code
+---
+<style>
+@media screen and (max-width: 600px) {
+}
+img.cool {
+    clear: both !important;
+    display: block;
+    margin: 30px auto;
+    float: none !important;
+}
+</style>
+
+Can't find a native module for that native feature you desperately need for your React Native app?
+I'd recommend to simply just making your own. I don't even code Java and I find creating native modules easy. Hope you will too! Getting setup is just a few commands and it should only take you a couple minutes to write a wrapper around your favorite library and then ship it to npm and link it into your app.
+
+<h2> Setting Up </h2>
+
+To start, simply install the react-native-create-library cli and generate your project
+{% highlight plain text %}
+npm install -g react-native-create-library;
+react-native-create-library OnePlusOne --platforms android --package-identifier evanjmg
+cd OnePlusOne
+{% endhighlight %}
+
+By default, the cli will include both platforms, but I only want android for this example so I'm going to include the platforms flag.
+You'll notice a directory was created and inside is a folder called android. All your android specific code will go in there. Notice also it named your package.json 'react-native-one-plus-one'. It's best to keep with the react native convention of prefixing your native modules with react-native and RN (android modules).
+
+In this case, you'll see inside the android folder a com > evanjmg folder. You can set your package identifier to whatever you like but it's best to set it first using the cli (I used evanjmg my github handle).  In that folder is RNOnePlusOneModule.java. You now have a working react native module!
+
+{% highlight java %}
+package evanjmg;
+
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Callback;
+
+public class RNOnePlusOneModule extends ReactContextBaseJavaModule {
+
+  private final ReactApplicationContext reactContext;
+
+  public RNOnePlusOneModule(ReactApplicationContext reactContext) {
+    super(reactContext);
+    this.reactContext = reactContext;
+  }
+
+  @Override
+  public String getName() {
+    return "RNOnePlusOne";
+  }
+}
+{% endhighlight %}
+
+But, it doesn't do anything...yet. It simply exposes an Java class into Javascript code. No methods or properies are exposed right now. However, we're all setup to become the next jedi.
+
+<img class="cool" src="https://media.giphy.com/media/vVCSJxqWdFfiw/giphy.gif"  />
+
+<h2> Implementing Your Native Code </h2>
+Now, let's do some jedi native stuff. As noted, we're going to create a Singleton class that has a method that adds one. So no matter where I import this native module in my application it will always keep count. By default, this module is already a Singleton as it's instantiated on application boot up and will hold it's value until the application is shut down.
+
+So let's add variable called count and a method called 'addOne'.
+
+{% highlight java %}
+
+package evanjmg;
+
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Callback;
+
+public class RNOnePlusOneModule extends ReactContextBaseJavaModule {
+  public int count = 0;
+  private final ReactApplicationContext reactContext;
+
+  public RNOnePlusOneModule(ReactApplicationContext reactContext) {
+    super(reactContext);
+    this.reactContext = reactContext;
+  }
+  @ReactMethod
+  public int addOne() {
+    return this.count++;
+  }
+  @Override
+  public String getName() {
+    return "RNOnePlusOne";
+  }
+}
+{% endhighlight %}
+
+Notice that we added the decorator @ReactMethod in order to expose the method to Javascript. This allows one to access the addOne method.
+
+<h2> Implementing Javascript </h2>
+Before writing the javascript, we always need to import our react native module. In order to do that for development, we need to do the following:
+- npm link OnePlusOne repo (or publish to npm/github) - `npm link`, this tells our local npm that hey we want to use this module locally somewhere.
+- Then, we need to go to our react native app repo and run `npm link react-native-one-plus-one`
+- After, we need to add this native module to our android gradle and application file by running `react native link react-native-one-plus-one`. It should give you a confirmation that your code is linked and you should be ready to use it in your react native app, by running `react-native run-android`. It should show up in your build, if this build fails you'll likely see a Java error that you can fix. After you have your application installed, you can add your native module to your javascript code.
+- <strong>Every time you make a change to the native module you'll need to rebuild with react-native run-android</strong>
+
+Now our Javascript, will look something like this...
+{% highlight javascript %}
+import OnePlusOne from 'react-native-one-plus-one'
+
+const result = OnePlusOne.addOne()
+console.log(result) // 1
+{% endhighlight %}
+
+Awesome. We've added natively! But there's more you can do...
+
+<h2> Implementing Events </h2>
+ Now say I want to my app to listen to the change of this count somewhere else in my app. That sounds incredibly difficult, but it's not! React native has so many awesome classes/event listeners etc that you can extend and hook into (see [here](https://github.com/facebook/react-native/tree/master/ReactAndroid/src/main/java/com/facebook/react/bridge)). For now, the easiest to implement is a DeviceEventEmitter event.
+
+{% highlight java %}
+
+package evanjmg;
+
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.Callback;
+import android.util.Log;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+
+public class RNOnePlusOneModule extends ReactContextBaseJavaModule {
+  public int count = 0;
+  public final String ON_COUNT_CHANGE = "ON_COUNT_CHANGE";
+  private final ReactApplicationContext reactContext;
+  public RNOnePlusOneModule(ReactApplicationContext reactContext) {
+    super(reactContext);
+    this.reactContext = reactContext;
+  }
+  @ReactMethod
+  public int addOne() {
+    int count = this.count++;
+    this.sendEvent(ON_COUNT_CHANGE, count);
+    return count;
+  }
+  private void sendEvent(String eventName, int count) {
+    try {
+     this.reactContext
+      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+      .emit(eventName, count);
+    } catch (Exception e) {
+       Log.e(eventName, "sendEvent called before bundle loaded");
+    }
+  }
+  @Override
+  public String getName() {
+    return "RNOnePlusOne";
+  }
+}
+{% endhighlight %}
+Notice at the top I imported logging and the DeviceEventManagerModule. Then I created a private method 'sendEvent' that use the
+Device EventManager to emit an event with the name 'ON_COUNT_CHANGE'. We can then use this method to send the amount to a Javascript listener like so...
+
+{% highlight javascript %}
+
+import { DeviceEventEmitter } from 'react-native'
+
+DeviceEventEmitter.addListener('ON_COUNT_CHANGE', (count) => {
+  console.log(count) // 1
+})
+
+{% endhighlight %}
+Pretty awesome huh? React Native modules are a breeze...
+
+
+<img class="cool" src="https://media.giphy.com/media/YuUJQKlfIKe0o/giphy.gif"  />
+
+
+
+ <div style="width: 100%;max-width: 600px;margin: 30px auto;">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-7004108850571451"
+     data-ad-slot="9824043731"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
