@@ -46,7 +46,7 @@ reddit-share: True
 events:
   - image: '/img/career/velocity.png'
     date: 'June 2016 - Present'
-    description: "Front End Web Developer @ <a href='https://velocityapp.com' target='_blank'>Velocity</a> - Emphasis: Typescript, Angular, React, & React Native"
+    description: "Front End Engineer @ <a href='https://velocityapp.com' target='_blank'>Velocity</a> - Emphasis: Typescript, Angular, React, & React Native"
   - image: "/img/career/glp.png"
     date: "October 2015 - June 2016"
     description: "Lead Full Stack Web Developer @ Great Little Place"
