@@ -87,6 +87,14 @@ public class RNOnePlusOneModule extends ReactContextBaseJavaModule {
   public int addOne() {
     return this.count++;
   }
+  @ReactMethod
+  public void getCount(Callback cb) {
+    try {
+        cb.invoke(this.count, null);
+    } catch (Exception e){
+        cb.invoke(e.toString(), null);
+    }
+  }
   @Override
   public String getName() {
     return "RNOnePlusOne";
@@ -94,7 +102,7 @@ public class RNOnePlusOneModule extends ReactContextBaseJavaModule {
 }
 {% endhighlight %}
 
-Notice that we added the decorator @ReactMethod in order to expose the method to Javascript. This allows one to access the addOne method.
+Notice that we added the decorator @ReactMethod in order to expose the method to Javascript. This allows one to access the addOne and getCount method.
 
 <h2> Implementing Javascript </h2>
 Before writing the javascript, we always need to import our react native module. In order to do that for development, we need to do the following:
@@ -105,10 +113,12 @@ Before writing the javascript, we always need to import our react native module.
 
 Now our Javascript, will look something like this...
 {% highlight javascript %}
-import OnePlusOne from 'react-native-one-plus-one'
+import onePlusOne from 'react-native-one-plus-one'
 
-const result = OnePlusOne.addOne()
-console.log(result) // 1
+const result = onePlusOne.addOne()
+console.log(onePlusOne.addOne(), 'ADDED ONE') // null since we're only adding
+console.log(onePlusOne.addOne(), 'ADDED ONE') // null as well
+onePlusOne.getCount(count => { console.log(count, 'should equal 2') })
 {% endhighlight %}
 
 Awesome. We've added natively! But there's more you can do...
@@ -140,6 +150,14 @@ public class RNOnePlusOneModule extends ReactContextBaseJavaModule {
     int count = this.count++;
     this.sendEvent(ON_COUNT_CHANGE, count);
     return count;
+  }
+  @ReactMethod
+  public void getCount(Callback cb) {
+    try {
+        cb.invoke(this.count, null);
+    } catch (Exception e){
+        cb.invoke(e.toString(), null);
+    }
   }
   private void sendEvent(String eventName, int count) {
     try {
