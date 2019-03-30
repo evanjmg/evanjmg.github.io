@@ -3,7 +3,7 @@
 url: "http://evanjmg.github.io"
 title: "Evan Gillogley"
 description: "Blog and website of Evan Gillogley, blogging mainly on tech and city life."
-keywords: "evan, gillogley, node.js, rails, technology, code, UCSb, General Assembly"
+keywords: "evan, gillogley, node.js, rails, technology, code, UCSB, General Assembly"
 favicon: "/img/favicon.ico"
 black-favicon: "/img/black-lab-glass.ico"
 google-tracking-id: "UA-49980549-1"
@@ -45,8 +45,14 @@ reddit-share: True
 
 events:
   - image: '/img/career/velocity.png'
-    date: 'June 2016 - Present'
-    description: "Lead Front End Developer @ <a href='https://velocityapp.com' target='_blank'>Velocity</a> - Emphasis: Typescript, Angular, React, & React Native"
+    date: 'March 2019 - Present'
+    description: "Head of Mobile and Web Engineering @ <a href='https://velocityapp.com' target='_blank'>Velocity</a> - Emphasis: Typescript, Angular, React, & React Native"
+  - image: '/img/career/velocity.png'
+    date: 'June 2018 - March 2019'
+    description: "Lead Front End Developer @ <a href='https://velocityapp.com' target='_blank'>Velocity</a>"
+  - image: '/img/career/velocity.png'
+    date: 'June 2016 - June 2018'
+    description: "Front End Developer @ <a href='https://velocityapp.com' target='_blank'>Velocity</a>"
   - image: "/img/career/glp.png"
     date: "October 2015 - June 2016"
     description: "Lead Full Stack Web Developer @ Great Little Place"
