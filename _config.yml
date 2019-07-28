@@ -46,7 +46,7 @@ reddit-share: True
 events:
   - image: '/img/career/ryanair.png'
     date: 'June 2019 - Present'
-    description: "Front End Developer @ <a href='https://ryanair.com' target='_blank'Ryanair</a> - Emphasis: Typescript, Angular"
+    description: "Front End Developer @ <a href='https://ryanair.com' target='_blank'>Ryanair</a> - Emphasis: Typescript, Angular"
   - image: '/img/career/velocity.png'
     date: 'March 2019 - June 2019'
     description: "Head of Mobile and Web Engineering @ <a href='https://velocityapp.com' target='_blank'>Velocity</a> - Emphasis: Typescript, Angular, React, & React Native"
