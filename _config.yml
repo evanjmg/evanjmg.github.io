@@ -24,7 +24,7 @@ pages_list:
   Career: 'career'
   Contact: 'contact'
 gems: [jekyll-paginate, pygments.rb]
-background-img: "/img/intro-bg-4.jpg"
+background-img: "/img/intro-bg-2.jpg"
 
 # About variables
 
