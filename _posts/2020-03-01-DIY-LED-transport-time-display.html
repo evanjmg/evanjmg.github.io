@@ -33,7 +33,6 @@ I live in Dublin right beside the LUAS tram, so I built my own tram stop display
 
 I took advantage what I already had and only paid for the LED and the wires.
 
-<p>
   <h2>Implementing the LED Display</h2>
   After searching for hours online, I found <a href="https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/">this article</a> to work perfectly for starting out with LEDs. It covers the setup with the products listed above. Simply match your red wire to the positive symbol on your adapter head and black to the negative, and screw them tight.<br> For your display to Raspberry PI, put the digital in cord into the 6th pin of your Raspberry pi as seen in the article and the GND in into the 3rd pin (see diagram in article).
 <br>Then once all your wiring is hooked up, boot up your pi. Your PI should be accessible via SSH & WIFI - set it up here (<a href="https://www.raspberrypi.org/documentation/remote-access/ssh/" target="_blank">ssh</a> and <a target="_blank" href="https://raspberrypihq.com/how-to-connect-your-raspberry-pi-to-wifi/">wifi</a>)
@@ -41,7 +40,6 @@ I took advantage what I already had and only paid for the LED and the wires.
 Once your PI is accessible, ssh into it via your shell (i.e Terminal on Mac). Then, finish installing all the python dependencies listed in the tutorial above and run the LED.
 Your LED should start to light up when you finish the tutorial.
 
-</p>
 <div style="width: 100%;margin: 30px auto;">
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <ins class="adsbygoogle"
@@ -58,7 +56,7 @@ Your LED should start to light up when you finish the tutorial.
 <h2>Implementing the API and Displaying Text</h2>
 The Dublin LUAS has a public XML api that gives me these times from a specific stop, so implementing the data part is relatively easy. However, the most difficult part I had was getting the LED text to work.
 There wasn't really a compatible text to LED system in place so I had to refactor someone elses code to work with this LED. I combined the tutorial code above with <a href="https://github.com/jwalanta/whiterabbit" target="_blank" >some text to LED code I found</a>.
-<p>
+<br>
   I ended up with this inside my python folder: https://github.com/evanjmg/led-to-text-display
   Simply clone this repo and replace it with your python folder and you should start getting LUAS times by running:
 
@@ -70,21 +68,21 @@ There wasn't really a compatible text to LED system in place so I had to refacto
   https://github.com/evanjmg/led-to-text-display/blob/master/examples/strandtest.py#L120
 
   I left the other LED configurations in there for testing purposes, note different brightness is required for the text displays.
-</p>
+
 <h2>Building A Frame</h2>
 I put together a frame with some wood that was around house. I am an amateur at all things electrical and carpentry, so don't take my advice on this and find skilled carpenter or do some googling. I just cut out a wood piece that matched and  grabbed some nails if you have any tips on how to make it look nice please leave a comment below.
-<p>
+<br>
 <h2>What I struggled With</h2>
 Text definitely was the most difficult part. Every LED is configured differently so the math on how they display things is different! In other words, the pixels run different directions depending how they are arranged.
 See my github issue here for more information: https://github.com/jwalanta/whiterabbit/issues/1
 Once I got the math right, it was a matter of coloring the text to give context of when things are due etc. See example here:
 
-<img class="led-display" src="/img/posts/led-display.jpeg" id="due" />
+<img class="led-display" style="transform: rotate(180deg)" src="/img/posts/led-display.jpeg" id="due" />
 
 I really enjoyed building this and it has definitely come in handy. If you come up with your own solutions, please share it in the comments.
 
 Thank you!
-</p>
+
 
  <div style="width: 100%;max-width: 600px;margin: 30px auto;">
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
