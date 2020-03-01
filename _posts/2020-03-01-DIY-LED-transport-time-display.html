@@ -35,7 +35,7 @@ I took advantage what I already had and only paid for the LED and the wires.
 
   <h2>Implementing the LED Display</h2>
   After searching for hours online, I found <a href="https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/">this article</a> to work perfectly for starting out with LEDs. It covers the setup with the products listed above. Simply match your red wire to the positive symbol on your adapter head and black to the negative, and screw them tight.<br> For your display to Raspberry PI, put the digital in cord into the 6th pin of your Raspberry pi as seen in the article and the GND in into the 3rd pin (see diagram in article).
-<br>Then once all your wiring is hooked up, boot up your pi. Your PI should be accessible via SSH & WIFI - set it up here (<a href="https://www.raspberrypi.org/documentation/remote-access/ssh/" target="_blank">ssh</a> and <a target="_blank" href="https://raspberrypihq.com/how-to-connect-your-raspberry-pi-to-wifi/">wifi</a>)
+<br><br>Then once all your wiring is hooked up, boot up your pi. Your PI should be accessible via SSH & WIFI - set it up here (<a href="https://www.raspberrypi.org/documentation/remote-access/ssh/" target="_blank">ssh</a> and <a target="_blank" href="https://raspberrypihq.com/how-to-connect-your-raspberry-pi-to-wifi/">wifi</a>)
 <br>
 Once your PI is accessible, ssh into it via your shell (i.e Terminal on Mac). Then, finish installing all the python dependencies listed in the tutorial above and run the LED.
 Your LED should start to light up when you finish the tutorial.
@@ -65,7 +65,7 @@ There wasn't really a compatible text to LED system in place so I had to refacto
   ```
 
   Change the standtest.py file to implement your own solution note my LUAS api calls are here:<br>
-  <a href="https://github.com/evanjmg/led-to-text-display/blob/master/examples/strandtest.py#L120" target="_blank">https://github.com/evanjmg/led-to-text-display/blob/master/examples/strandtest.py#L120</a><br>
+  <a href="https://github.com/evanjmg/led-to-text-display/blob/master/examples/strandtest.py#L120" target="_blank">https://github.com/evanjmg/led-to-text-display/blob/master/examples/strandtest.py#L120</a><br><br>
 
   I left the other LED configurations in there for testing purposes, note different brightness is required for the text displays.
 
@@ -74,7 +74,7 @@ I put together a frame with some wood that was around house. I am an amateur at 
 <br>
 <h2>What I struggled With</h2>
 Text definitely was the most difficult part. Every LED is configured differently so the math on how they display things is different! In other words, the pixels run different directions depending how they are arranged.
-See my github issue here for more information: <a href="https://github.com/jwalanta/whiterabbit/issues/1" target="_blank">https://github.com/jwalanta/whiterabbit/issues/1</a>
+See my github issue here for more information: <a href="https://github.com/jwalanta/whiterabbit/issues/1" target="_blank">https://github.com/jwalanta/whiterabbit/issues/1</a><br>
 Once I got the math right, it was a matter of coloring the text to give context of when things are due etc. See example here:
 
 <img class="led-display" style="transform: rotate(180deg)" src="/img/posts/led-display.jpeg" id="due" />
