@@ -1,19 +1,19 @@
 # Site settings
 
-url: "http://evanjmg.github.io"
-title: "Evan Gillogley"
-description: "Blog and website of Evan Gillogley, blogging mainly on tech and city life."
-keywords: "evan, gillogley, node.js, angular, technology, code, react native"
-favicon: "/img/favicon.ico"
-black-favicon: "/img/black-lab-glass.ico"
-google-tracking-id: "UA-49980549-1"
-disqus-shortname: "evanjmg"
+url: 'http://evanjmg.github.io'
+title: 'Evan Gillogley'
+description: 'Blog and website of Evan Gillogley, blogging mainly on tech and city life.'
+keywords: 'evan, gillogley, node.js, angular, technology, code, react native'
+favicon: '/img/favicon.ico'
+black-favicon: '/img/black-lab-glass.ico'
+google-tracking-id: 'UA-49980549-1'
+disqus-shortname: 'evanjmg'
 
 # Navigation bar links
 # Blog link in the blog and post pages will point to the blog.html#blog
 # In the default page it will point to the preview of the last post
 syntax-highlighting:
-  enabled : true
+  enabled: true
   css: syntax.css
 markdown: kramdown
 highlighter: rouge
@@ -24,16 +24,16 @@ pages_list:
   Career: 'career'
   Contact: 'contact'
 gems: [jekyll-paginate, pygments.rb]
-background-img: "/img/intro-bg-2.jpg"
+background-img: '/img/intro-bg-2.jpg'
 
 # About variables
 
-me-img: "/img/me.png"
+me-img: '/img/me.png'
 
 # Blog variables
 paginate: 15
 
-paginate_path: "blog/page:num"
+paginate_path: 'blog/page:num'
 
 post-preview-words: 128
 
@@ -59,36 +59,36 @@ events:
   - image: '/img/career/velocity.png'
     date: 'June 2016 - June 2018'
     description: "Front End Developer @ <a href='https://velocityapp.com' target='_blank'>Velocity</a>"
-  - image: "/img/career/glp.png"
-    date: "October 2015 - June 2016"
-    description: "Lead Full Stack Web Developer @ Great Little Place"
-  - image: "/img/career/general-assembly.png"
-    date: "June 2015 - Sept 2015"
-    description: "Student @ General Assembly, Web Development Immersive course, focusing on Node.js, Rails, and Angular"
-  - image: "/img/career/GCULondon.png"
-    date: "Jan 2015 - May 2016"
-    description: "MSc International Marketing @ <a href=\"http://www.di.uoa.gr/eng\" target=\"_blank\">Glasgow Caledonian University</a> - Emphasis: Digital Marketing"
-  - image: "/img/career/bbb-logo.png"
-    date: "March 2014 - Jan 2015"
-    description: "Communications Specialist @ <a target='_blank' href=\'http://http://www.bbb.org/northeast-california'>Better Business Bureau</a>. I developed and implemented digital marketing campaigns and managed the website."
-  - image: "/img/career/ucsb-logo.png"
-    date: "September 2010 - December 2013"
-    description: "Bachelor of Arts in Economics and Film & Media Studies from UC Santa Barbara"
+  - image: '/img/career/glp.png'
+    date: 'October 2015 - June 2016'
+    description: 'Lead Full Stack Web Developer @ Great Little Place'
+  - image: '/img/career/general-assembly.png'
+    date: 'June 2015 - Sept 2015'
+    description: 'Student @ General Assembly, Web Development Immersive course, focusing on Node.js, Rails, and Angular'
+  - image: '/img/career/GCULondon.png'
+    date: 'Jan 2015 - May 2016'
+    description: 'MSc International Marketing @ <a href="http://www.di.uoa.gr/eng" target="_blank">Glasgow Caledonian University</a> - Emphasis: Digital Marketing'
+  - image: '/img/career/bbb-logo.png'
+    date: 'March 2014 - Jan 2015'
+    description: "Communications Specialist @ <a target='_blank' href='http://http://www.bbb.org/northeast-california'>Better Business Bureau</a>. I developed and implemented digital marketing campaigns and managed the website."
+  - image: '/img/career/ucsb-logo.png'
+    date: 'September 2010 - December 2013'
+    description: 'Bachelor of Arts in Economics and Film & Media Studies from UC Santa Barbara'
 # First image of the Career timeline
-career-img: "https://media.giphy.com/media/sRWA81tuBkfW8/giphy.gif"
+career-img: 'https://media.giphy.com/media/sRWA81tuBkfW8/giphy.gif'
 
 # Social networks variables (many more available: facebook, flickr, dribbble, pinterest, instagram, tumblr etc.)
 social:
-  - title: "rss"
-    url: "/feed.xml"
-  - title: "github"
-    url: "https://github.com/evanjmg"
-  - title: "linkedin"
-    url: "http://uk.linkedin.com/in/egillogley"
-  - title: "twitter"
-    url: "https://twitter.com/evanjmg"
+  - title: 'rss'
+    url: '/feed.xml'
+  - title: 'github'
+    url: 'https://github.com/evanjmg'
+  - title: 'linkedin'
+    url: 'http://uk.linkedin.com/in/egillogley'
+  - title: 'twitter'
+    url: 'https://twitter.com/evanjmg'
 
-404-img: "/img/labtocat.png"
+404-img: '/img/labtocat.png'
 
 # Exclusion list from the generated _site
-exclude: ["Rakefile", "LICENSE", "readme.markdown", "vendor"]
+exclude: ['Rakefile', 'LICENSE', 'readme.markdown', 'vendor']
