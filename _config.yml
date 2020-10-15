@@ -44,8 +44,11 @@ reddit-share: True
 # Career variables
 
 events:
+  - image: '/img/career/teckro-square.png'
+    date: 'July 2020 - Present'
+    description: "Senior Front End Developer @ <a href='https://teckro.com' target='_blank'>Teckro</a> - Emphasis: Typescript, React"
   - image: '/img/career/ryanair.png'
-    date: 'June 2019 - Present'
+    date: 'June 2019 - July 2020'
     description: "Front End Developer @ <a href='https://ryanair.com' target='_blank'>Ryanair</a> - Emphasis: Typescript, Angular"
   - image: '/img/career/velocity.png'
     date: 'March 2019 - June 2019'
