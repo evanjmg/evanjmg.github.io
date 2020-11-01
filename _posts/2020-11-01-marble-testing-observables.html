@@ -1,0 +1,163 @@
+---
+layout: post
+section-type: post
+title: 'Marble Testing Epics with Redux Observable'
+date: 2020-11-01 17:30:22.000000000 +00:00
+categories: Code
+---
+
+Before Redux Observable, I found testing asynchronous side effects (redux-thunk) very difficult. Our code was always messy, relying on weird mocks or
+[tightly coupled to redux dispatcher](https://redux.js.org/recipes/writing-tests). Moreover, it would always involve a callback or an await through every step. Something like this:
+
+{% highlight javascript %}
+
+describe('Todo actions', () => {
+
+  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', async () => {
+    // setup actions: have a list of expected actions
+    const expectedActions = [
+      { type: types.FETCH_TODOS_REQUEST },
+      { type: types.FETCH_TODOS_SUCCESS, payload: { todos: ['do something'] } }
+    ]
+
+    // mock entire store
+    const store = mockStore({ todos: [] })
+
+    await  store.dispatch(actions.fetchTodos());
+    // return of async actions
+    expect(store.getActions()).toEqual(expectedActions)
+  });
+});
+
+{% endhighlight %}
+<br>
+While this is brief and simple, it does not indicate when these actions were fired, just the order. If you add a timeout or debounce to your thunk, these tests become very complicated.
+Whereas with Redux Observable, I can declare time, order, and various sequences all in the same test. Say we want to simulate a _300ms_ delay between request and success:
+<br>
+{% highlight javascript %}
+import { of } from 'rxjs'
+import marbles from 'rxjs-marbles';
+
+describe('Todo actions', () => {
+
+  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', marbles((m) => {
+    // setup initiator actions and state
+    const actions$ = m.cold('a', { a: { type: types.FETCH_TODOS_REQUEST } })
+    const state$ = of({ todos: [] })
+
+    // write expectation of result - loading action, a 300ms delay, and result action
+    const expectedActions = m.cold('a 300ms b',
+      {
+        a: { type: types.FETCH_TODOS_LOADING },
+        b: { type: types.FETCH_TODOS_SUCCESS, payload: { todos: ['do something'] } }
+      }
+    )
+    m.expect(fetchTodos$(actions$, state$)).toBeObservable(expectedActions)
+  }));
+});
+
+{% endhighlight %}
+<br>
+Notice, that the 'a 300ms b' declaration. The a represents the loading action at the first millisecond and the 300ms wait is just after.
+Then at 302 ms, we have the b action which maps to the success action.
+This marble syntax allows us to directly declare the behaviour and expectations of our observable over time, allowing us to clearly describe what is happening.
+<br>
+<h3>How Redux Observable Works</h3>
+
+[Redux observable](https://redux-observable.js.org/) is a separate running process that starts at the beginning of your application. It does not run on a middleware system like [redux thunk](https://github.com/reduxjs/redux-thunk). It is a set of observables merged together into a stream that listens to the actions dispatched by the store (dispatch).
+Similar to redux, every action dispatched triggers a series of processes.
+
+Unlike redux, Redux observable uses a set of merged observables to process the actions all at once.
+[Observables](https://rxjs-dev.firebaseapp.com/guide/observable) are lazy Push collections of multiple values, a representation of values over time. Some people call these streams. While this may be incorrect, it is similar in behaviour. Data flows through these observables from an input to an output.
+
+In Redux Observable, these observables are called *[Epics](https://redux-observable.js.org/docs/basics/Epics.html)* - a function which takes a stream of actions and returns a stream of actions.
+These actions are then committed to the store. For every action one can return a set of actions (0 or more).
+
+See a Todos example below:
+
+{% highlight javascript %}
+
+
+export const fetchTodos$ = (actions$: Observable<Action>, state$: Observable<ReduxAppState>): Observable<Action> =>
+  actions$.pipe(
+    // listen to request action dispatch
+    ofType(types.FETCH_TODOS_REQUEST),
+    switchMap(() => {
+      return concat(
+        // first, fire off loading action
+        of({ type: types.FETCH_TODOS_LOADING }),
+        // then, wait 300ms and fire off success action
+        of({
+          type: types.FETCH_TODOS_SUCCESS,
+          payload: { todos: ['do something'] }
+        }).pipe(delay(300))
+      )
+    })
+  )
+
+export const todoEpic = combineEpics(fetchTodos$, ...otherEpics)
+
+{% endhighlight %}
+<br>
+Above, we continuously listen to the FETCH_TODOS_REQUEST action by filtering it out of the actions stream with the [ofType](https://redux-observable.js.org/docs/basics/Epics.html) operator.
+Then, we use the switchMap operator to map to an inner observable (concat) which sends out multiple actions.
+The [switchMap](https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap) operator allows us to cancel the previous inner observable if it is running, and then create a fresh one.
+This is very useful for cancelling ajax requests.
+
+[Concat](https://www.learnrxjs.io/learn-rxjs/operators/combination/concat) then allows us to first emit one action and then emit another delayed action.
+Notice, that both of these are inside a stream [of](https://www.learnrxjs.io/learn-rxjs/operators/creation/of), so one can add delays/timers/debouncing to this if needed.
+Any action that is an output of this Observable will be dispatched to the store and the cycle continues to whatever epic is listening.
+
+<h3>How Marble Testing Works</h3>
+[Marble testing](https://github.com/ReactiveX/rxjs/blob/master/docs_app/content/guide/testing/marble-testing.md) is a mechanism that allows us to test how observables behave over time.
+This allows one to declaratively test the values an observable emits over time.
+
+I won't cover marble testing in depth, but highlight its importance and advantages over testing promises, functions, callbacks.
+If you want an indepth introduction, I highly recommend reading this [article](https://medium.com/@bencabanes/marble-testing-observable-introduction-1f5ad39231c) afterward.
+<br><br>
+<h4>Some basics</h4>
+A marble test is a comparison of one observables emitted values to another expected observables emitted values.
+These values are representated by ticks (millisecond length) in time like below and mapped characters:
+{% highlight javascript %}
+m.cold('--') // 2 milliseconds pass nothing is emitted and the observable has not completed
+m.cold('--|') // 2 milliseconds pass and on the 3rd millisecond the observable completes.
+m.cold('(a|)', { a: 'Hi' }) // 1 millisecond passes, emitting a, and completing the observable all at the same time.
+{% endhighlight %}
+
+- The tick '-' means no value was a emitted in a millisecond and the observable has not completed.
+- The pipe '|' means the observable completed at this millisecond.
+- 'a' represents a defined emitted value. One can use the entire alphabet if needed.
+- Anything inside brances () mean multiple things happened inside this millisecond such as multiple events were fired at once.
+<br><br>
+<h4>Why is this awesome?</h4>
+While it may be difficult to understand it all first, it's definitely a lot more declarative and easier to debug than any other known asynchronous testing I've seen.
+
+Marble testing makes TDD very easy and straightforward. Declare the marbles first then implement the solution in the epic.
+
+Also *[RXJS](https://www.learnrxjs.io/)* is incredibly powerful and built for complex applications. With it,
+these one-line operators allow the following:
+ - request/event cancellation ([switchMap](https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap))
+ - debouncing ([debounceTime](https://www.learnrxjs.io/learn-rxjs/operators/filtering/debouncetime))
+ - diffing ([distinctUntilChanged](https://www.learnrxjs.io/learn-rxjs/operators/filtering/distinctuntilchanged))
+ - racing ([race](https://www.learnrxjs.io/learn-rxjs/operators/combination/race))
+ - waiting until a condition has been met or redux state to exist ([skipUtil/skipWhile](https://www.learnrxjs.io/learn-rxjs/operators/filtering/skipwhile))
+ - buffering, collecting values until expectation met ([buffer](https://www.learnrxjs.io/learn-rxjs/operators/transformation/buffer))
+
+
+Give it a go and let me know how RXJS, Marble testing, and Redux observable work out for you!
+
+Cheers!
+
+
+<div style="width: 100%;max-width: 600px;margin: 30px auto;">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-7004108850571451"
+     data-ad-slot="9824043731"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
