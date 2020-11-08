@@ -1,4 +1,4 @@
 User-Agent: *
-Disallow: 
+Disallow:
 Allow: /
-Sitemap: http://www.uktravelpal.com/sitemap.xml
+Sitemap: https://evanjmg.com/sitemap.xml
