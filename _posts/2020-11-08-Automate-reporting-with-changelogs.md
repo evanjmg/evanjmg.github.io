@@ -10,8 +10,8 @@ post-preview-words: A release just went out this morning and your colleague just
 ### The Problem
 
 A release just went out this morning and your colleague just came back from holiday. A large bug surfaces on production and a QA asks, "What's the cause?".
-We look at the commits and find the associated ticket. The commit is in the release, but the ticket was never tested, tagged or put into the release notes.
-Humans make mistakes far to often. I've seen too much code go to production without proper tagging.
+We look at the commits and find the associated ticket. The commit is in the release, but the ticket was never tested, tagged, or put into the release notes.
+Humans make mistakes far too often. I've seen too much code go to production without proper tagging.
 
 ### A Solution
 
@@ -39,8 +39,8 @@ We should be able to ship code without the 'coder' there and be confident in the
 
 When working on a piece of code, I often find that I am working on one of the following:
 - bugfix: a minor fix to an existing piece of software that has an issue
-- feature: a new feature implemented in a backward compatible way
-- refactor: an update to existing software or improvement that doesn't change behaviour
+- feature: a new feature implemented in a backward-compatible way
+- refactor: an update to existing software or improvement that doesn't change behavior
 - test: writing missing tests for software
 - chore: a change to internal dev like infrastructure or productivity tools
 
@@ -82,16 +82,15 @@ It then adds that information to the commit like so:
 <br>
 Now, I have all the information needed to decide the release. I can take a list of changes and create a version.
 If I give this list to someone else, they may give it a different version since they may miss a breaking change in scrolling through the commits.
-Instead, we can version automatically using semantic versioning and thus versioning will be consistent regardless of who runs a
-release.
+Instead, we can version automatically using semantic versioning and thus the versioning will be consistent regardless of who runs a release.
 
 #### What is Semantic versioning?
 
 [Semantic versioning](https://nodesource.com/blog/semver-a-primer/) automatically versions a group of changes based on a particular set of rules.
 I can generate a version automatically with the information provided above by the commits.
 
-How is this done? It goes through the commits and checks for the biggest change and increments by that.
-If its only a group of bugfixes, it is likely to only increment by 0.0.1.
+How is this done? It goes through the commits and checks for the biggest change and increments the release.
+If it's only a group of bugfixes, it is likely to only increment by 0.0.1.
 If it's a mixture like above, the version will be incremented by 0.1.0.
 And if it's a full-on breaking change or new system an entire version will be incremented (1.0.0).
 
@@ -147,7 +146,7 @@ The last step is to share the tagged version and changes everywhere:
 These steps can be done in the CI or build system with [JIRA](https://developer.atlassian.com/server/jira/platform/webhooks/) hooks.
 When I decide to make a release, I will make a release commit and it will update the changelog, add tags to all the tickets.
 Then any member on your team can click a version and see an accurate list of changes in the release. No tickets will be missed because they aren't tagged manually by anyone on the team.
-The changelog an also be forwarded onto a release ticket if necessary and users can see specific details of the release or one can just use the JIRA filter of the release to see the status of all
+The changelog can also be forwarded onto a release ticket if necessary. Users can see specific details of the release or one can just use the JIRA filter of the release to see the status of all
 tickets in the release.
 
 In future articles, I will go over specific implementations of this workflow.
