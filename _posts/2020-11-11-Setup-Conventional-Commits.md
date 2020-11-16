@@ -24,7 +24,7 @@ In this example, I'm going to use Commitizen and Commitlint to glue everything t
 
 First install,
 ```
- npm i commitizen @commitlint/cli husky --save-dev
+ npm i commitizen @commitlint/cli husky @commitlint/config-conventional --save-dev
 ```
 
 Husky allows one to validate the commit on the final step of the pre-commit process. Add the following to the package.json to setup the pre-commit process.
@@ -39,9 +39,15 @@ Husky allows one to validate the commit on the final step of the pre-commit proc
 ```
 Here, Commitlint reads the git commit metadata output from the pre-commit step. If the commit matches the (standard format](https://www.conventionalcommits.org/en/v1.0.0/) of a conventional commit, then the commit will fail. So this prevents developers from putting random commit messages like git commit -m "Almost done!".
 
+And you will also need to set a lint config, like so:
+
+```
+echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
+```
+
 *Making a commit*
 
-Instead of committing, developers should use git-cz or cz. To set this up, add the following to your package.json
+Instead of committing, developers should use git cz or cz. To set this up, add the following to your package.json
 ```
 "scripts": {
   "commit": "cz"
