@@ -153,7 +153,7 @@ In future articles, I will go over specific implementations of this workflow.
 If you're interested in a simple code example of what we discussed, please check out this git repo here:
 [https://github.com/evanjmg/changelog-example](https://github.com/evanjmg/changelog-example)
 
-Part 2 coming soon!
+Learn how to implement this workflow in [Part 2](/code/2020/11/16/Setup-Conventional-Commits.html).
 
 <div style="width: 100%;max-width: 600px;margin: 30px auto;">
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
