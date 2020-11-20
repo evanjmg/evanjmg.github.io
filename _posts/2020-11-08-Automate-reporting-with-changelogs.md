@@ -38,9 +38,9 @@ We should be able to ship code without the 'coder' there and be confident in the
 ### Semantic versioning
 
 When working on a piece of code, I often find that I am working on one of the following:
-- bugfix: a minor fix to an existing piece of software that has an issue
-- feature: a new feature implemented in a backward-compatible way
-- refactor: an update to existing software or improvement that doesn't change behavior
+- bugfix: a fix to an existing piece of software that has an issue - results in a patch version increment
+- feature: a new feature implemented in a backward-compatible way - results in a minor version increment
+- refactor: an update to existing software or improvement that doesn't change behavior - minor version increment
 - test: writing missing tests for software
 - chore: a change to internal dev like infrastructure or productivity tools
 

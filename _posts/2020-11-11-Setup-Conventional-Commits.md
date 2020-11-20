@@ -17,7 +17,7 @@ There are a couple of conventional commit standards out there on the Internet. M
 
 - [Commitizen CLI](https://github.com/commitizen/cz-cli) (npm library) is the most popular conventional commit generation tool. It includes changelog generation from the formatted commits when releasing.
 - [Conventional Changelog](https://github.com/conventional-changelog/conventional-changelog) is a changelog generation tool that commitizen uses under the hood. Allows one to customize the changelog generation and other bits in the process.
-- [Conventional Commits Standards](https://www.conventionalcommits.org/en/v1.0.0/) (specification) is useful resource to understand how the formatting of conventional commits works.
+- [Conventional Commits Standards](https://www.conventionalcommits.org/en/v1.0.0/) (specification) is a useful resource to understand how the formatting of conventional commits works.
 - [CommitLint](https://github.com/conventional-changelog/commitlint#readme) validates commits to see if matches the standard formatting of a conventional commit.
 
 In this example, I'm going to use Commitizen and Commitlint to glue everything together. Commitizen simply prompts the user to select options or fill in parts of a commit. This prevents the user from making a colon typo etc.
